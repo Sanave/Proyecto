@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titulo %}INFO{% endblock %}
+{% block contenido %}
+<div class="container">
+    <h3>Nombre</h3>
+    <p>{{producto.nombre}}</p>
+    <h3>Código</h3>
+    <p>{{producto.codigo}}</p>
+    <h3>Precio</h3>
+    <p>{{producto.precio}}</p>
+    <h3>Estado</h3>
+    <p>{{producto.disponible}}</p>
+    <a class="btn btn-danger"  href="{{url_for('producto.eliminarproducto', id = producto.id)}}">Eliminar Producto</a>
+</div>
+
+{% endblock%}

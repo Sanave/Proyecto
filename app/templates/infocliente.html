@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titulo %}INFO{% endblock %}
+{% block contenido %}
+<div class="container">
+    <h3>Nombre</h3>
+    <p>{{cliente.nombre}}</p>
+    <h3>Correo</h3>
+    <p>{{cliente.correo}}</p>
+    <h3>Telefono</h3>
+    <p>{{cliente.telefono}}</p>
+    <h3>Dirección</h3>
+    <p>{{cliente.direccion}}</p>
+    <h3>Tipo de Cliente</h3>
+    <p>{{cliente.tipo_cliente}}</p>
+    <h3>Estado</h3>
+    <p>{{cliente.estado}}</p>
+    <a class="btn btn-danger"  href="{{url_for('cliente.eliminar_cliente', id = cliente.id)}}">Eliminar Cliente</a>
+</div>
+
+{% endblock%}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block titulo %}CLIENTES{% endblock %}
+
+{% block subventana%}
+<h2>Registrar Cliente.</h2>
+<form class="mx-4" id="formulario_registro_cliente">
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nombre">Nombre</label>
+        <input class="form-control" type="text" id="nombre">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="correo">Correo</label>
+        <input class="form-control" type="email" id="correo">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="telefono">Teléfono</label>
+        <input class="form-control" type="text" id="telefono">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="direccion">Direccón</label>
+        <input class="form-control" type="text" id="direccion">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="tcliente">Tipo de Cliente</label>
+        <select id="tcliente">
+            <option value="individual">Individual</option>
+            <option value="empresa">Empresa</option>
+        </select>
+    </div>
+</form>
+<div class="mt-5">
+<button class="btn btn-danger mx-2" id="cancelar">Cancelar</button>
+<button class="btn btn-primary" id="guardar">Guardar</button>
+</div>
+{% endblock%}
+
+{% block actualizar %}
+<h2>Actualizar Datos</h2>
+<form class="mx-4" id="formulario_actualizar_cliente">
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_nombre">Nombre</label>
+        <input class="form-control" type="text" id="nuevo_nombre">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_correo">Correo</label>
+        <input class="form-control" type="email" id="nuevo_correo">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_telefono">Teléfono</label>
+        <input class="form-control" type="text" id="nuevo_telefono">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_direccion">Direccón</label>
+        <input class="form-control" type="text" id="nuevo_direccion">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_tcliente">Tipo de Cliente</label>
+        <select id="nuevo_tcliente">
+            <option value="individual">Individual</option>
+            <option value="empresa">Empresa</option>
+        </select>
+    </div>
+</form>
+<div class="mt-5">
+<button class="btn btn-danger mx-2" id="actualizar_cancelar">Cancelar</button>
+<button class="btn btn-primary" id="actualizar_guardar">Guardar</button>
+</div>
+{% endblock%}
+
+
+{% block contenido %}
+    <div class="row">
+        <h1>Clientes</h1>
+    </div>
+    <div class="row">
+        <button class=" btn btn-primary col-sm-3" id="registrar">Registrar Cliente</button>
+    </div>
+
+    <div class="row mt-5">
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>CORREO</th>
+                <th>TELEFONO</th>
+                <th>DIRECCÓN</th>
+                <th>ESTADO</th>
+            </tr>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block info %}
+<h1>Información</h1>
+<button id="info_eliminar" class="btn btn-danger">Eliminar</button>
+<button id="actualizar_info" class="btn btn-success">Actualizar Información</button>
+<h3>Nombre</h3>
+<p id="info_nombre" data-id=""></p>
+<h3>Dirección</h3>
+<p id="info_direccion"></p>
+<h3>Correo Electrónico</h3>
+<p id="info_correo"></p>
+<h3>Teléfono</h3>
+<p id="info_telefono"></p>
+<h3>Tipo de Cliente</h3>
+<p id="info_tipo_cliente"></p>
+{% endblock %}
+
+{% block js %}
+<script src="{{url_for('static', filename = 'js/clientes.js')}}"></script>
+{% endblock %}

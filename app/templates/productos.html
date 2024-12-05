@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block titulo %}PRODUCTOS{% endblock %}
+
+{% block subventana %}
+<h2>Registrar Producto.</h2>
+<form class="mx-4" id="formulario_registro_producto">
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nombre">Nombre</label>
+        <input class="form-control" type="text" id="nombre">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="precio">Precio</label>
+        <input class="form-control" type="number" id="precio" step="0.01">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="codigo">Código</label>
+        <input class="form-control" type="text" id="codigo">
+    </div>
+</form>
+<div class="mt-5">
+<button class="btn btn-danger mx-2" id="cancelar">Cancelar</button>
+<button class="btn btn-primary" id="guardar">Guardar</button>
+</div>
+{% endblock %}
+
+{% block actualizar %}
+<h2>Actualizar Datos</h2>
+<form class="mx-4" id="formulario_actualizar_producto">
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_nombre">Nombre</label>
+        <input class="form-control" type="text" id="nuevo_nombre">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_precio">Precio</label>
+        <input class="form-control" type="number" id="nuevo_precio" step="0.01">
+    </div>
+    <div class="mb-3 mt-3">
+        <label class="form-label" for="nuevo_codigo">Código</label>
+        <input class="form-control" type="text" id="nuevo_codigo">
+    </div>
+</form>
+<div class="mt-5">
+<button class="btn btn-danger mx-2" id="actualizar_cancelar">Cancelar</button>
+<button class="btn btn-primary" id="actualizar_guardar">Guardar</button>
+</div>
+{% endblock %}
+
+{% block contenido %}
+    <div class="row">
+        <h1>Productos</h1>
+    </div>
+    <div class="row">
+        <button class=" btn btn-primary col-sm-3" id="registrar">Registrar Producto</button>
+    </div>
+
+    <div class="row mt-5">
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>PRECIO</th>
+                <th>CÓDIGO</th>
+                <th>ACCIONES</th>
+            </tr>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block info %}
+<h1>Información del Producto</h1>
+<button id="info_eliminar" class="btn btn-danger">Eliminar</button>
+<button id="actualizar_info" class="btn btn-success">Actualizar Información</button>
+<h3>Nombre</h3>
+<p id="info_nombre" data-id=""></p>
+<h3>Precio</h3>
+<p id="info_precio"></p>
+<h3>Código</h3>
+<p id="info_codigo"></p>
+{% endblock %}
+
+{% block js %}
+<script src="{{url_for('static', filename = 'js/productos.js')}}"></script>
+{% endblock %}

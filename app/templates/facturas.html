@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block titulo %}FACTURAS{% endblock %}
+
+{% block contenido %}
+    <div class="row">
+        <h1>Facturas</h1>
+    </div>
+    <div class="row mt-5">
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>CÓDIGO</th>
+                <th>FECHA</th>
+                <th>CLIENTE</th>
+                <th>TOTAL</th>
+            </tr>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block info %}
+<h1>Información de la Factura</h1>
+<button id="info_eliminar" class="btn btn-danger">Eliminar</button>
+<h3>Código</h3>
+<p id="info_codigo" data-id=""></p>
+<h3>Fecha</h3>
+<p id="info_fecha"></p>
+<h3>Cliente</h3>
+<p id="info_cliente"></p>
+<h3>ID Compra</h3>
+<p id="info_id_compra"></p>
+<h3>Total</h3>
+<p id="info_total"></p>
+{% endblock %}
+
+{% block js %}
+<script src="{{url_for('static', filename = 'js/facturas.js')}}"></script>
+{% endblock %}

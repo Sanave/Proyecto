@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block titulo %}VENTAS{% endblock %}
+
+{% block subventana %}
+<h2>Registrar Venta</h2>
+<div>
+    <label for="cliente">Seleccionar Cliente:</label>
+    <select id="cliente" class="form-control">
+        {%for cliente in clientes%}
+        <option value="{{cliente.id}}">{{cliente.nombre}}</option>
+        {%endfor%}
+    </select>
+</div>
+
+<div class="mt-3">
+    <label for="productos">Seleccionar Productos</label>
+    <select id="productos_seleccion">
+        {%for producto in productos%}
+        <option value="{{producto.id}}">{{producto.nombre}}&nbsp;${{producto.precio}}</option>
+        {%endfor%}
+    </select>
+    <button class="btn btn-primary" id="agregar_producto">Agregar</button>
+</div>
+
+<div id="productos_seleccionados" class="table-responsive" style="max-height: 300px;">
+    <table class="table table-hover" style="max-height: 200px; overflow-y: scroll;">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Código</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody id="tbody_seleccionados"></tbody>
+    </table>
+</div>
+<div>
+    <strong>Total de la venta:</strong>
+    <span id="total_venta">$0</span>
+</div>
+
+<div class="mt-5">
+    <button class="btn btn-danger mx-2" id="cancelar">Cancelar</button>
+    <button class="btn btn-primary" id="guardar">Guardar</button>
+</div>
+{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <h1>Ventas</h1>
+</div>
+<div class="row">
+    <button class="btn btn-primary col-sm-3" id="registrar">Registrar Venta</button>
+</div>
+
+<div class="row mt-5">
+    <table class="table table-hover">
+        <tr>
+            <th>ID</th>
+            <th>FECHA</th>
+            <th>CLIENTE</th>
+            <th>CÓDIGO DE FACTURA</th>
+            <th>TOTAL</th>
+        </tr>
+        <tbody>
+            {% for compra in compras %}
+            <tr>
+                <td>{{compra.id}}</td>
+                <td>{{compra.fecha}}</td>
+                <td>{{compra.cliente.nombre}}</td>
+                <td>{{compra.factura.numero_factura}}</td>
+                <td>{{compra.total}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{url_for('static', filename = 'js/ventas.js')}}"></script>
+{% endblock %}
