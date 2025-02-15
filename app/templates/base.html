@@ -7,11 +7,14 @@
     <title>{% block titulo %}{% endblock %}</title>
 </head>
 <body>
-    
+    {% if current_user.is_authenticated %}
+    <div>{{ current_user.nombre }}</div>
+    {% endif %}
+    <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
             <ul class="navbar-nav">
-                
+                {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link active" href="{{url_for('nav.clientes')}}"> CLIENTES</a>
                 </li>
@@ -27,6 +30,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{url_for('aut.logout')}}">CERRAR SESIÓN</a>
                 </li>
+                {%else %}
                 
                 <li class="nav-item">
                     <a class="nav-link active" href="{{url_for('aut.login')}}">ACCEDER</a>
@@ -34,38 +38,15 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{url_for('aut.registro')}}">REGISTRARSE</a>
                 </li>
+                {% endif %}
                 
             </ul>
         </div>
     </nav>
-    
-    
-    
-    <div id="subventana" class="position-fixed top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.5); display: none;">
-        <div class="bg-white mx-auto w-50 container my-1 py-4 rounded" style="min-height: 200px;">
-            {% block subventana %}{% endblock %}
-        </div>
-    </div>
 
-    <div id="subventana_actualizar" class="position-fixed top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.5); display: none;">
-        <div class="bg-white mx-auto w-50 container my-1 py-4 rounded" style="min-height: 200px;">
-            {% block actualizar %}{% endblock %}
-        </div>
-    </div>
-   
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                {%block contenido %}{% endblock %}
-            </div>
-            <div class="col-sm-6">
-                <h5 id="info_mensaje">Seleccione un campo de la tabla para ver más opciones</h5>
-                <div style="display: none;" id="info_contenido">
-                    {% block info %}{% endblock %}
-                </div>
-            </div>
-        </div>
-    </div>
+    {%block contenido%}{%endblock%}
+    
+    
     
     
 

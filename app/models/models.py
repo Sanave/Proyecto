@@ -27,7 +27,7 @@ class Usuario(db.Model, UserMixin):
             "nombre" : self.nombre,
             "correo" : self.correo
         }
-        
+      
 class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(150), nullable = False)
