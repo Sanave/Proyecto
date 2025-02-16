@@ -1,3 +1,13 @@
+// Display de formulario de registro
+document.getElementById('registrar').addEventListener('click', async () => {
+    document.getElementById('formulario_registro').style.display = 'block';
+});
+
+document.getElementById('cancelar').addEventListener('click', async () => {
+    document.getElementById('formulario_registro').style.display = 'none';
+});
+
+
 // CARGAR TABLAS
 async function cargar_tabla(){
     const tabla = document.getElementById('tbody');
@@ -18,10 +28,9 @@ async function cargar_tabla(){
                 `;
                 tabla.appendChild(tr);
 
-                info();
             });
         }else{
-            console.log('depuracion: respuesta no ok');
+            console.log('No se cargaron las tablas');
         }
     } catch (error) {
         console.log('depuracion', error);
@@ -57,7 +66,7 @@ document.getElementById('guardar').addEventListener('click', async () => {
             alert(resultado.mensaje);
             const inputs = document.querySelectorAll('form input');
             inputs.forEach(input => input.value = '');
-            document.getElementById('subventana').style.display = 'none';
+            document.getElementById('formulario_registro').style.display = 'none';
             tbody.innerHTML = '';
             cargar_tabla();
         }else{
@@ -69,8 +78,9 @@ document.getElementById('guardar').addEventListener('click', async () => {
     }
 });
 
+
 // MOSTRAR INFORMACIÓN DEL CLIENTE Y DATOS EN LA VENTANA DE ACTUALIZAR DATOS
-function info(){
+/*function info(){
     document.querySelectorAll('.boton_info').forEach(button =>{button.addEventListener('click', async (e) =>{
         const id = e.target.value;
         
@@ -200,3 +210,4 @@ document.getElementById('actualizar_guardar').addEventListener('click', async ()
 });
 // ------------------------
 window.onload = () => {cargar_tabla()};
+*/

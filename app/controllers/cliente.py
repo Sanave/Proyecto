@@ -16,11 +16,11 @@ def registrar_cliente():
             cliente = Cliente(nombre = nombre, correo = correo, telefono = telefono, direccion = direccion, tipo_cliente = tipo_cliente, estado = 'activo')
             db.session.add(cliente)
             db.session.commit()
-            return jsonify({"mensaje" : "El cliente se ha registrado."})
+            return jsonify({"mensaje" : "El cliente se ha registrado."}), 200
         except Exception as e:
             db.session.rollback()
             print(f"Error: {e}")
-            return jsonify({"mensaje" : "El cliente no se ha podido registrar."})   
+            return jsonify({"mensaje" : "El cliente no se ha podido registrar."}), 500   
 
 @cliente.route('/eliminar_cliente', methods=['POST'])
 def eliminar_cliente():
@@ -54,7 +54,7 @@ def info_cliente(id):
 @cliente.route('/get_clientes')
 def get_clientes():
     clientes = Cliente.query.all()
-    return jsonify([cliente.to_dict() for cliente in clientes])
+    return jsonify([cliente.to_dict() for cliente in clientes]), 200
 
 @cliente.route('/actualizar_cliente', methods = ['POST'])
 def actualizar_cliente():

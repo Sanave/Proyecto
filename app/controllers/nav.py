@@ -16,7 +16,8 @@ def login():
 
 @nav.route('/clientes')
 def clientes():
-    return render_template('clientes.html')
+    clientes = Cliente.query.all()
+    return render_template('clientes.html', clientes = clientes)
 
 @nav.route('/productos')
 def productos():
