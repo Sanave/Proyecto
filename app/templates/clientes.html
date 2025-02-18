@@ -12,6 +12,7 @@
     <div class="row dropdown">
         <div style="display: none;" id="formulario_registro">
             <h2 class="mt-3">Registrar Cliente.</h2>
+<!-- Formulario de registro-->
         <form class="mx-4" id="formulario_registro_cliente" action="{{url_for('cliente.registrar_cliente')}}" method="post">
             <div class="mb-3 mt-3">
                 <label class="form-label" for="nombre">Nombre</label>
@@ -43,8 +44,9 @@
             </div>
         </form>
     </div>
-
+<!-- Tablas -->
     <div class="row mt-5">
+    <div class="col">
         <table class="table table-hover">
             <tr>
                 <th>ID</th>
@@ -64,13 +66,53 @@
                     <td>{{cliente.direccion}}</td>
                     <td>{{cliente.estado}}</td>
                     <form action="{{url_for('cliente.eliminar_cliente')}}" method="post">
-                        <td><button class="btn btn-danger" name="id" value="{{cliente.id}}">X</button></td>
+                        <td><button class="btn btn-danger" name="id" value="{{cliente.id}}" type="submit">X</button></td>
+                        <td><button class="btn btn-success boton_info" name="info" value="{{cliente.id}}" type="button">***</button></td>
                     </form>
                 </tr>
                 {% endfor%}
             </tbody>
         </table>
     </div>
+<!-- Barra lateral -->
+    <div class="col" style="display: none;" id="formulario_actualizar">
+        <h2>Detalles</h2>
+        <form action="{{url_for('cliente.actualizar_cliente')}}" method="post">
+            <div class="mb-3 mt-3">
+                <label for="id_readonly" class="form-label">ID</label>
+                <input type="text" name="id_readonly" id="id_readonly" readonly>
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label" for="info_nombre">Nombre</label>
+                <input class="form-control" type="text" id="info_nombre" name="info_nombre">
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label" for="info_correo">Correo</label>
+                <input class="form-control" type="email" id="info_correo" name="info_correo">
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label" for="info_telefono">Teléfono</label>
+                <input class="form-control" type="text" id="info_telefono" name="info_telefono">
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label" for="info_direccion">Direccón</label>
+                <input class="form-control" type="text" id="info_direccion" name="info_direccion">
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label" for="info_tcliente">Tipo de Cliente</label>
+                <select id="info_tcliente" name="info_tcliente">
+                    <option value="individual">Individual</option>
+                    <option value="empresa">Empresa</option>
+                </select>
+            </div>
+            <div class="mt-5 mb-3">
+                <button class="btn btn-danger mx-2" id="cancelar_info" type="button">Cancelar</button>
+                <button class="btn btn-primary" id="guardar_info" type="submit" name="guardar_info">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 

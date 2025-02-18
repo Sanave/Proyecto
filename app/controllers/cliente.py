@@ -52,26 +52,42 @@ def info_cliente(id):
         return jsonify(cliente.to_dict())
 
 
-@cliente.route('/get_clientes')
-def get_clientes():
-    clientes = Cliente.query.all()
-    return jsonify([cliente.to_dict() for cliente in clientes]), 200
+@cliente.route('/get_cliente')
+def get_cliente():
+    id = request.args.get('id')
+    cliente = Cliente.query.filter_by(id = id).first()
+    if cliente:
+        return jsonify(cliente.to_dict())
+    else:
+        print('El cliente no existe')
 
 @cliente.route('/actualizar_cliente', methods = ['POST'])
 def actualizar_cliente():
-    datos = request.get_json()
-    id = datos.get('id')
-    nombre = datos.get('nombre')
-    correo = datos.get('correo')
-    telefono = datos.get('telefono')
-    direccion = datos.get('direccion')
+    id = request.form.get('id_readonly')
+    print('idd' + id)
+    nombre = request.form.get('info_nombre')
+    correo = request.form.get('info_correo')
+    telefono = request.form.get('info_telefono')
+    direccion = request.form.get('info_direccion')
+    tcliente = request.form.get('info_tcliente')
     cliente = Cliente.query.filter_by(id = id).first()
     if cliente:
-        cliente.nombre = nombre
-        cliente.correo = correo
-        cliente.telefono = telefono
-        cliente.direccion = direccion
-        db.session.commit()
-        return jsonify({"mensaje" : "Los datos se han actualizado."})
+        try:
+            cliente.nombre = nombre
+            cliente.correo = correo
+            cliente.telefono = telefono
+            cliente.direccion = direccion
+            cliente.tipo_cliente = tcliente
+            db.session.commit()
+            flash('Se han actualizado los datos del cliente.', 'success')
+            return redirect(url_for('nav.clientes'))
+        except Exception as e:
+            print(e)
+            flash('Hubo un error', 'error')
+            return redirect(url_for('nav.clientes'))
     else:
-        return jsonify({"mensaje" : "Los datos no se han podido actualizar"}), 500
+        flash('Cliente no encontrado.', 'error')
+        return redirect(url_for('nav.clientes'))
+    
+    return render_template('clientes.html')
+       
