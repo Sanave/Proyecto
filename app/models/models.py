@@ -36,8 +36,8 @@ class Cliente(db.Model):
     correo = db.Column(db.String(150), nullable = False, unique = True)
     tipo_cliente = db.Column(db.String(20), nullable = False)
     estado = db.Column(db.String(25), nullable = False)
-    compras = db.relationship('Compra', backref = 'cliente', lazy = True, cascade="all, delete-orphan")
-    facturas = db.relationship('Factura', backref = 'cliente', lazy = True, cascade="all, delete-orphan")
+    #compras = db.relationship('Compra', backref = 'cliente', lazy = True, cascade="all, delete-orphan")
+    #facturas = db.relationship('Factura', backref = 'cliente', lazy = True, cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
@@ -48,8 +48,8 @@ class Cliente(db.Model):
             "correo" : self.correo,
             "tipo_cliente" : self.tipo_cliente,
             "estado" : self.estado,
-            "compras" : [compra.id for compra in self.compras],
-            "facturas" : [factura.id for factura in self.facturas]
+           # "compras" : [compra.id for compra in self.compras],
+            #"facturas" : [factura.id for factura in self.facturas]
         }
 
 class Producto(db.Model):

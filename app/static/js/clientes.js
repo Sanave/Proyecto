@@ -1,15 +1,19 @@
 // Display de formulario de registro
-document.getElementById('registrar').addEventListener('click', async () => {
-    document.getElementById('formulario_registro').style.display = 'block';
+document.getElementById('registrar').addEventListener('click', ()=> {
+   // document.getElementById('formulario_registro').style.display = 'block';
+    const formulario_registro = document.getElementById('formulario_registro');
+    if (formulario_registro.style.display == 'block'){ formulario_registro.style.display = 'none'}
+    else{formulario_registro.style.display = 'block'};
 });
 
-document.getElementById('cancelar').addEventListener('click', async () => {
+document.getElementById('cancelar').addEventListener('click', () => {
     document.getElementById('formulario_registro').style.display = 'none';
 });
 
 
+
 // CARGAR TABLAS
-async function cargar_tabla(){
+/*async function cargar_tabla(){
     const tabla = document.getElementById('tbody');
     try {
         respuesta = await fetch('/get_clientes');
@@ -24,7 +28,9 @@ async function cargar_tabla(){
                 <td>${cliente.telefono}</td>
                 <td>${cliente.direccion}</td>
                 <td>${cliente.estado}</td>
-                <td><button class="btn btn-primary boton_info" value="${cliente.id}">Info</button></td>
+                <td><form action="${eliminarClienteUrl}" method="post">
+                        <td><button class="btn btn-danger" name="id" value="${cliente.id}">X</button></td>
+                    </form></td>
                 `;
                 tabla.appendChild(tr);
 
@@ -35,11 +41,11 @@ async function cargar_tabla(){
     } catch (error) {
         console.log('depuracion', error);
     }
-};
+};*/
 
 
-// GUARDAR CLIENTE Y RECARGAR TABLA
-document.getElementById('guardar').addEventListener('click', async () => {
+// GUARDAR CLIENTE Y RECARGAR PÁGINA
+/*document.getElementById('guardarr').addEventListener('click', async () => {
     const fnombre = document.getElementById('nombre').value;
     const fcorreo = document.getElementById('correo').value;
     const ftelefono = document.getElementById('telefono').value;
@@ -68,7 +74,7 @@ document.getElementById('guardar').addEventListener('click', async () => {
             inputs.forEach(input => input.value = '');
             document.getElementById('formulario_registro').style.display = 'none';
             tbody.innerHTML = '';
-            cargar_tabla();
+            location.reload();
         }else{
             alert(resultado.mensaje);
         }
@@ -77,7 +83,7 @@ document.getElementById('guardar').addEventListener('click', async () => {
         console.log('Ha habido un error.', error);
     }
 });
-
+*/
 
 // MOSTRAR INFORMACIÓN DEL CLIENTE Y DATOS EN LA VENTANA DE ACTUALIZAR DATOS
 /*function info(){

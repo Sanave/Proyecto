@@ -1,47 +1,48 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, flash
 from app.models.models import db, Cliente, Compra, Factura
 cliente = Blueprint('cliente', __name__)
 
-@cliente.route('/registrar_cliente', methods = ['GET','POST'])
+# Registrar clientes
+@cliente.route('/registrar_cliente', methods = ['POST'])
 def registrar_cliente():
     if request.method == 'POST':
-        datos = request.get_json()
-        nombre = datos.get('nombre')
-        correo = datos.get('correo')
-        telefono = datos.get('telefono')
-        direccion = datos.get('direccion')
-        tipo_cliente = datos.get('tipo_cliente')
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        telefono = request.form['telefono']
+        direccion = request.form['direccion']
+        tipo_cliente = request.form['tcliente']
 
         try:
             cliente = Cliente(nombre = nombre, correo = correo, telefono = telefono, direccion = direccion, tipo_cliente = tipo_cliente, estado = 'activo')
             db.session.add(cliente)
             db.session.commit()
-            return jsonify({"mensaje" : "El cliente se ha registrado."}), 200
+            flash('El cliente se ha registrado.', 'success')
+            return redirect(url_for('nav.clientes'))
         except Exception as e:
             db.session.rollback()
-            print(f"Error: {e}")
-            return jsonify({"mensaje" : "El cliente no se ha podido registrar."}), 500   
+            print(e)
+            flash('Hubo un error. No se ha registrado el cliente.')
+    return render_template('clientes.html')
 
+
+# Eliminar clientes
 @cliente.route('/eliminar_cliente', methods=['POST'])
 def eliminar_cliente():
-    datos = request.get_json()
-    id = datos.get('id')
-    cliente = Cliente.query.filter_by(id = id).first()
-    
+    cliente_id = request.form['id']
+   
     try:
-        for compra in cliente.compras:
-            compra.productos = []  
-            db.session.delete(compra)  
-        for factura in cliente.facturas:
-            db.session.delete(factura) 
-        db.session.delete(cliente)
-        db.session.commit() 
-        
-        return jsonify({"mensaje" : "cliente eliminado"})
-    
+        cliente = Cliente.query.filter_by(id = cliente_id).first()
+        if cliente:
+            db.session.delete(cliente)
+            db.session.commit()
+            flash('El cliente se ha eliminado', 'success')
+            return redirect(url_for('nav.clientes'))    
     except Exception as e:
         db.session.rollback() 
-        print(f"depuración: {e}")
+        print(e)
+        flash('Hubo un error.')
+        return redirect(url_for('nav.clientes'))
+    return render_template('clientes.html')
 
 
 @cliente.route('/info_cliente/<int:id>', methods = ['GET'])

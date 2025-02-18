@@ -8,40 +8,40 @@
     <div class="row">
         <h1>Clientes</h1>
     </div>
-    <div class="row">
-        <button class=" btn btn-primary col-sm-3" id="registrar">Registrar Cliente</button>
+    <button class=" btn btn-primary col-sm-3 mb-3" id="registrar">Registrar Cliente</button>
+    <div class="row dropdown">
         <div style="display: none;" id="formulario_registro">
-            <h2>Registrar Cliente.</h2>
-        <form class="mx-4" id="formulario_registro_cliente">
+            <h2 class="mt-3">Registrar Cliente.</h2>
+        <form class="mx-4" id="formulario_registro_cliente" action="{{url_for('cliente.registrar_cliente')}}" method="post">
             <div class="mb-3 mt-3">
                 <label class="form-label" for="nombre">Nombre</label>
-                <input class="form-control" type="text" id="nombre">
+                <input class="form-control" type="text" name="nombre">
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="correo">Correo</label>
-                <input class="form-control" type="email" id="correo">
+                <input class="form-control" type="email" name="correo">
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="telefono">Teléfono</label>
-                <input class="form-control" type="text" id="telefono">
+                <input class="form-control" type="text" name="telefono">
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="direccion">Direccón</label>
-                <input class="form-control" type="text" id="direccion">
+                <input class="form-control" type="text" name="direccion">
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="tcliente">Tipo de Cliente</label>
-                <select id="tcliente">
+                <select name="tcliente">
                     <option value="individual">Individual</option>
                     <option value="empresa">Empresa</option>
                 </select>
             </div>
-        </form>
-        <div class="mt-5">
-            <button class="btn btn-danger mx-2" id="cancelar">Cancelar</button>
-            <button class="btn btn-primary" id="guardar">Guardar</button>
+            <div class="mt-5 mb-3">
+                <button class="btn btn-danger mx-2" id="cancelar" type="button">Cancelar</button>
+                <button class="btn btn-primary" id="guardar" type="submit">Guardar</button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <div class="row mt-5">
@@ -63,6 +63,9 @@
                     <td>{{cliente.telefono}}</td>
                     <td>{{cliente.direccion}}</td>
                     <td>{{cliente.estado}}</td>
+                    <form action="{{url_for('cliente.eliminar_cliente')}}" method="post">
+                        <td><button class="btn btn-danger" name="id" value="{{cliente.id}}">X</button></td>
+                    </form>
                 </tr>
                 {% endfor%}
             </tbody>
@@ -74,4 +77,5 @@
 
 {% block js %}
 <script src="{{url_for('static', filename = 'js/clientes.js')}}"></script>
+<script>const eliminarClienteUrl = "{{ url_for('cliente.eliminar_cliente') }}";</script>
 {% endblock %}
