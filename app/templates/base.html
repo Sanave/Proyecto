@@ -9,7 +9,7 @@
 </head>
 <body>
     {% if current_user.is_authenticated %}
-    <div>{{ current_user.nombre }}</div>
+    <div>Usuario: {{ current_user.nombre }}</div>
     {% endif %}
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">

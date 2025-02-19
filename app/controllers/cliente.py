@@ -6,6 +6,7 @@ cliente = Blueprint('cliente', __name__)
 @cliente.route('/registrar_cliente', methods = ['POST'])
 def registrar_cliente():
     if request.method == 'POST':
+        # Datos del formulario
         nombre = request.form['nombre']
         correo = request.form['correo']
         telefono = request.form['telefono']
@@ -13,6 +14,7 @@ def registrar_cliente():
         tipo_cliente = request.form['tcliente']
 
         try:
+            # Registrar cliente
             cliente = Cliente(nombre = nombre, correo = correo, telefono = telefono, direccion = direccion, tipo_cliente = tipo_cliente, estado = 'activo')
             db.session.add(cliente)
             db.session.commit()
@@ -31,8 +33,10 @@ def eliminar_cliente():
     cliente_id = request.form['id']
    
     try:
+        # Buscar cliente en BD
         cliente = Cliente.query.filter_by(id = cliente_id).first()
         if cliente:
+            # Eliminar el cliente
             db.session.delete(cliente)
             db.session.commit()
             flash('El cliente se ha eliminado', 'success')
@@ -45,13 +49,7 @@ def eliminar_cliente():
     return render_template('clientes.html')
 
 
-@cliente.route('/info_cliente/<int:id>', methods = ['GET'])
-def info_cliente(id):
-    cliente = Cliente.query.filter_by(id = id).first()
-    if cliente:
-        return jsonify(cliente.to_dict())
-
-
+# Obtener información de un cliente
 @cliente.route('/get_cliente')
 def get_cliente():
     id = request.args.get('id')
@@ -61,6 +59,8 @@ def get_cliente():
     else:
         print('El cliente no existe')
 
+
+# Actualizar información de un cliente
 @cliente.route('/actualizar_cliente', methods = ['POST'])
 def actualizar_cliente():
     id = request.form.get('id_readonly')
@@ -90,4 +90,11 @@ def actualizar_cliente():
         return redirect(url_for('nav.clientes'))
     
     return render_template('clientes.html')
+
+
+    '''@cliente.route('/info_cliente/<int:id>', methods = ['GET'])
+def info_cliente(id):
+    cliente = Cliente.query.filter_by(id = id).first()
+    if cliente:
+        return jsonify(cliente.to_dict())'''
        
