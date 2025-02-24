@@ -25,6 +25,7 @@ botonesInfo.forEach(boton => {
         const telefono = document.getElementById('info_telefono');
         const direccion = document.getElementById('info_direccion');
         const tcliente = document.getElementById('info_tcliente');
+        const venta = document.getElementById('id_venta').value = id;
 
         try {
             const respuesta = await fetch(`/get_cliente?id=${id}`);
@@ -44,5 +45,21 @@ botonesInfo.forEach(boton => {
 });
 
 document.getElementById('cancelar_info').addEventListener('click', ()=>{
+    document.getElementById('info_nombre').readOnly = true;
+    document.getElementById('info_correo').readOnly = true;
+    document.getElementById('info_telefono').readOnly = true;
+    document.getElementById('info_direccion').readOnly = true;
+    document.getElementById('info_tcliente').readOnly = true;
+    document.getElementById('info_tcliente').disabled = true;
     document.getElementById('formulario_actualizar').style.display = 'none';
+});
+
+// ReadOnly block
+document.getElementById('readonly_block').addEventListener('click', () => {
+    document.getElementById('info_nombre').readOnly = false;
+    document.getElementById('info_correo').readOnly = false;
+    document.getElementById('info_telefono').readOnly = false;
+    document.getElementById('info_direccion').readOnly = false;
+    document.getElementById('info_tcliente').readOnly = false;
+    document.getElementById('info_tcliente').disabled = false;
 });

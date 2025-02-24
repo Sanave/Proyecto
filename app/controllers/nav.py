@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from app.models.models import Cliente, Producto, Factura, Compra
 nav = Blueprint('nav', __name__)
 
@@ -45,3 +45,8 @@ def infocliente(id):
 def infoproducto(id):
     producto = Producto.query.filter_by(id=id).first()
     return render_template('infoproducto.html', producto = producto)
+
+@nav.route('/venta', methods = ['GET', 'POST'])
+def venta():
+    id = request.form['id_venta']
+    return render_template('venta.html', id = id)

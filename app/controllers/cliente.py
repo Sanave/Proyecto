@@ -64,7 +64,6 @@ def get_cliente():
 @cliente.route('/actualizar_cliente', methods = ['POST'])
 def actualizar_cliente():
     id = request.form.get('id_readonly')
-    print('idd' + id)
     nombre = request.form.get('info_nombre')
     correo = request.form.get('info_correo')
     telefono = request.form.get('info_telefono')
@@ -92,9 +91,5 @@ def actualizar_cliente():
     return render_template('clientes.html')
 
 
-    '''@cliente.route('/info_cliente/<int:id>', methods = ['GET'])
-def info_cliente(id):
-    cliente = Cliente.query.filter_by(id = id).first()
-    if cliente:
-        return jsonify(cliente.to_dict())'''
+
        

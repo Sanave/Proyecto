@@ -76,34 +76,38 @@
     </div>
 <!-- Barra lateral -->
     <div class="col" style="display: none;" id="formulario_actualizar">
+        <form action="{{ url_for('nav.venta')}}" method="post">
+            <input type="text" style="display: none;" name="id_venta" id="id_venta" readonly>
+            <button class="btn btn-success" id="venta_info" type="submit"> Ingresar Nueva Venta</button>
+        </form>
         <h2>Detalles</h2>
         <form action="{{url_for('cliente.actualizar_cliente')}}" method="post">
             <div class="mb-3 mt-3">
-                <label for="id_readonly" class="form-label">ID</label>
-                <input type="text" name="id_readonly" id="id_readonly" readonly>
+                <input type="text" name="id_readonly" id="id_readonly" readonly style="display: none;">
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="info_nombre">Nombre</label>
-                <input class="form-control" type="text" id="info_nombre" name="info_nombre">
+                <input class="form-control" type="text" id="info_nombre" name="info_nombre" readonly>
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="info_correo">Correo</label>
-                <input class="form-control" type="email" id="info_correo" name="info_correo">
+                <input class="form-control" type="email" id="info_correo" name="info_correo" readonly>
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="info_telefono">Teléfono</label>
-                <input class="form-control" type="text" id="info_telefono" name="info_telefono">
+                <input class="form-control" type="text" id="info_telefono" name="info_telefono" readonly>
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="info_direccion">Direccón</label>
-                <input class="form-control" type="text" id="info_direccion" name="info_direccion">
+                <input class="form-control" type="text" id="info_direccion" name="info_direccion" readonly>
             </div>
             <div class="mb-3 mt-3">
                 <label class="form-label" for="info_tcliente">Tipo de Cliente</label>
-                <select id="info_tcliente" name="info_tcliente">
+                <select id="info_tcliente" name="info_tcliente" disabled>
                     <option value="individual">Individual</option>
                     <option value="empresa">Empresa</option>
                 </select>
+                <button type="button" class="btn btn-success" id="readonly_block">Actualizar Datos</button>
             </div>
             <div class="mt-5 mb-3">
                 <button class="btn btn-danger mx-2" id="cancelar_info" type="button">Cancelar</button>
