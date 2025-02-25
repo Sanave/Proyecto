@@ -57,8 +57,7 @@ class Producto(db.Model):
     nombre = db.Column(db.String(150), nullable = False)
     precio = db.Column(db.Integer, nullable = False)
     codigo = db.Column(db.String(150), nullable = False, unique = True)
-    disponible = db.Column(db.Boolean, default = True)
-    compras = db.relationship('Compra', secondary=compra_producto, backref=db.backref('productos_compra', lazy='dynamic'))
+    #compras = db.relationship('Compra', secondary=compra_producto, backref=db.backref('productos_compra', lazy='dynamic'))
 
     def to_dict(self):
         return {
@@ -66,8 +65,7 @@ class Producto(db.Model):
             "nombre" : self.nombre,
             "precio" : self.precio,
             "codigo" : self.codigo,
-            "disponible" : self.disponible,
-            "compras" : [compra.id for compra in self.compras]
+            #"compras" : [compra.id for compra in self.compras]
         }
 
 class Factura(db.Model):

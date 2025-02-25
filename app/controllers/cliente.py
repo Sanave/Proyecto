@@ -63,6 +63,7 @@ def get_cliente():
 # Actualizar información de un cliente
 @cliente.route('/actualizar_cliente', methods = ['POST'])
 def actualizar_cliente():
+    # Datos del formulario
     id = request.form.get('id_readonly')
     nombre = request.form.get('info_nombre')
     correo = request.form.get('info_correo')
@@ -72,6 +73,7 @@ def actualizar_cliente():
     cliente = Cliente.query.filter_by(id = id).first()
     if cliente:
         try:
+            # Actualizar datos
             cliente.nombre = nombre
             cliente.correo = correo
             cliente.telefono = telefono

@@ -21,22 +21,22 @@ botonesInfo.forEach(boton => {
         const id = botonClickeado.value;
         const id_readonly = document.getElementById('id_readonly');
         const nombre = document.getElementById('info_nombre');
-        const correo = document.getElementById('info_correo');
-        const telefono = document.getElementById('info_telefono');
-        const direccion = document.getElementById('info_direccion');
-        const tcliente = document.getElementById('info_tcliente');
-        const venta = document.getElementById('id_venta').value = id;
+        const codigo = document.getElementById('info_codigo');
+        const precio = document.getElementById('info_precio');
+        //const direccion = document.getElementById('info_direccion');
+       // const tcliente = document.getElementById('info_tcliente');
+       // const venta = document.getElementById('id_venta').value = id;
 
         try {
-            const respuesta = await fetch(`/get_cliente?id=${id}`);
+            const respuesta = await fetch(`/get_producto?id=${id}`);
             if (respuesta.ok) {
-                const cliente = await respuesta.json();
+                const producto = await respuesta.json();
                 id_readonly.value = id;
-                nombre.value = cliente.nombre;
-                correo.value = cliente.correo;
-                telefono.value = cliente.telefono;
-                direccion.value = cliente.direccion;
-                tcliente.value = cliente.tipo_cliente;
+                nombre.value = producto.nombre;
+                codigo.value = producto.codigo;
+                precio.value = producto.precio;
+                //direccion.value = cliente.direccion;
+                //tcliente.value = cliente.tipo_cliente;
             }
         } catch (error) {
             console.log(error);
@@ -46,19 +46,19 @@ botonesInfo.forEach(boton => {
 // Bloqueo de ReadOnly
 document.getElementById('cancelar_info').addEventListener('click', ()=>{
     document.getElementById('info_nombre').readOnly = true;
-    document.getElementById('info_correo').readOnly = true;
-    document.getElementById('info_telefono').readOnly = true;
-    document.getElementById('info_direccion').readOnly = true;
-    document.getElementById('info_tcliente').readOnly = true;
-    document.getElementById('info_tcliente').disabled = true;
+    document.getElementById('info_codigo').readOnly = true;
+    document.getElementById('info_precio').readOnly = true;
+    //document.getElementById('info_direccion').readOnly = true;
+    //document.getElementById('info_tcliente').readOnly = true;
+    //document.getElementById('info_tcliente').disabled = true;
     document.getElementById('formulario_actualizar').style.display = 'none';
 });
 
 document.getElementById('readonly_block').addEventListener('click', () => {
     document.getElementById('info_nombre').readOnly = false;
-    document.getElementById('info_correo').readOnly = false;
-    document.getElementById('info_telefono').readOnly = false;
-    document.getElementById('info_direccion').readOnly = false;
-    document.getElementById('info_tcliente').readOnly = false;
-    document.getElementById('info_tcliente').disabled = false;
+    document.getElementById('info_codigo').readOnly = false;
+    document.getElementById('info_precio').readOnly = false;
+    //document.getElementById('info_direccion').readOnly = false;
+    //document.getElementById('info_tcliente').readOnly = false;
+    //document.getElementById('info_tcliente').disabled = false;
 });

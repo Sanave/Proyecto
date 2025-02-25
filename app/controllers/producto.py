@@ -1,85 +1,92 @@
 
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from app.models.models import db, Producto  
 producto = Blueprint('producto', __name__)
 
+# Registrar producto
 @producto.route('/registrar_producto', methods=['POST'])
 def registrar_producto():
     if request.method == 'POST':
-        datos = request.get_json()
-        nombre = datos.get('nombre')
-        precio = datos.get('precio')
-        codigo = datos.get('codigo')
+        # Datos del formulario
+        nombre = request.form['nombre']
+        precio = request.form['precio']
+        codigo = request.form['codigo']
 
         try:
-            producto = Producto(nombre=nombre, precio=precio, codigo=codigo)
+            # Registrar producto
+            producto = Producto(nombre = nombre, precio = precio, codigo = codigo)
             db.session.add(producto)
             db.session.commit()
-            return jsonify({"mensaje": "Producto registrado."})
+            flash('El producto se ha registrado', 'success')
+            return redirect (url_for('nav.productos'))
         except Exception as e:
             db.session.rollback()
-            print(f"Error: {e}")
-            return jsonify({"mensaje": "No se pudo registrar el producto."}), 500
+            print(e)
+            flash('Hubo un error, no se ha regisrado el producto.', 'error')
+    return render_template('productos.html')
 
-@producto.route('/get_productos', methods=['GET'])
-def get_productos():
-    productos = Producto.query.all()
-    return jsonify([producto.to_dict() for producto in productos])
 
-@producto.route('/info_producto/<int:id>', methods=['GET'])
-def info_producto(id):
-    producto = Producto.query.filter_by(id=id).first()
+
+
+# Obtener información de un producto
+@producto.route('/get_producto', methods=['GET'])
+def get_producto():
+    id = request.args.get('id')
+    producto = Producto.query.filter_by(id = id).first()
     if producto:
         return jsonify(producto.to_dict())
+    else:
+        print('El producto no existe')
 
+
+# Eliminar producto
 @producto.route('/eliminar_producto', methods=['POST'])
 def eliminar_producto():
-    datos = request.get_json()
-    id = datos.get('id')
-    producto = Producto.query.filter_by(id=id).first()
+    producto_id = request.form['id']
 
     try:
-        db.session.delete(producto)
-        db.session.commit()
-        return jsonify({"mensaje": "El producto se ha eliminado."})
+        # Buscar cliente
+        producto = Producto.query.filter_by(id = producto_id).first()
+        if producto:
+            # Eliminar cliente
+            db.session.delete(producto)
+            db.session.commit()
+            flash('El producto se ha eliminado.', 'success')
+            return redirect(url_for('nav.productos'))
     except Exception as e:
-        print(e)
         db.session.rollback()
-        return jsonify({"mensaje": "Error al eliminar producto."}), 500
+        print(e)
+        flash('Hubo un error.', 'error')
+        return redirect(url_for('nav.productos'))
+    return render_template('productos.html')
 
+
+
+
+# Actualizar infromación de un producto
 @producto.route('/actualizar_producto', methods=['POST'])
 def actualizar_producto():
-    datos = request.get_json()
-    id = datos.get('id')
-    nombre = datos.get('nombre')
-    precio = datos.get('precio')
-    codigo = datos.get('codigo')
-    
-    producto = Producto.query.filter_by(id=id).first()
+    # Datos del producto
+    id = request.form['id_readonly']
+    nombre = request.form['info_nombre']
+    codigo = request.form['info_codigo']
+    precio = request.form['info_precio']
+    producto = Producto.query.filter_by(id = id).first()
 
-    if producto:
+    try:
+        # Actualizar los datos del producto
         producto.nombre = nombre
-        producto.precio = precio
         producto.codigo = codigo
+        producto.precio = precio
         db.session.commit()
-        return jsonify({"mensaje": "El producto se ha actualizdo."})
-    else:
-        return jsonify({"mensaje": "Producto no encontrado."}), 404
-
-@producto.route('/get_producto_data/<int:id>/<int:cantidad>')
-def get_producto_data(id, cantidad):
-    producto = Producto.query.get(id) 
-    if producto:
-
-        producto_data = {
-            "nombre": producto.nombre,
-            "precio": producto.precio,
-            "codigo": producto.codigo,
-            "total": producto.precio * cantidad
-        }
-        return jsonify(producto_data)
-    else:
-        return jsonify({'error': 'Producto no encontrado'}), 404
+        flash('Se han actualizado los datos del producto.', 'success')
+        return redirect(url_for('nav.productos'))
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        flash('Hubo un error.', 'error')
+        return redirect(url_for('nav.productos'))
+    
 
 
     
