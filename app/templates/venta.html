@@ -1,2 +1,75 @@
-<h1>ventas</h1>
-<h2>{{id}}</h2>
+{% extends "base.html" %}
+{% block titulo %}Venta{% endblock %}
+
+{% block contenido %}
+<h2>Registro de venta</h2>
+<div>
+    <h4>Datos del Cliente</h4>
+    <p>Nombre: {{ cliente.nombre }}</p>
+    <p>Teléfono: {{ cliente.telefono }}</p>
+    <p>Dirección de Envío: {{ cliente.direccion }}</p>
+</div>
+<div>
+    <h4>Productos</h4>
+    <div class="row">
+    <!-- Tabla de selección de productos-->
+     <div class="col">
+        <form action="">
+           <label for="opcion_busqueda">Buscar por: </label>
+           <select name="opcion_busqueda" id="">
+            <option value="nombre">Nombre</option>
+            <option value="codigo">Código</option>
+           </select>
+           <input type="text" name="producto">
+           <button type="button" class="btn btn-primary" id="boton_buscar">Buscar</button>
+        </form>
+        <div>
+            <table class="table table-hover">
+                <thead>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                </thead>
+                <tbody>
+                    {% for producto in productos%}
+                    <tr>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.codigo }}</td>
+                        <td>{{ producto.precio }}</td>
+                        <td>
+                            <form class="formulario_agregar">
+                                <input type="text" class="id_producto" value="{{ producto.id }}" name="id_producto" readonly style="display: none;">
+                                <input type="number" min="0" max="100" name="cantidad" class="cantidad">
+                                <button type="button" class="btn btn-success boton_agregar" name="boton_agregar">Agregar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+     </div>
+    <!-- Espacio de productos seleccionados-->
+    <div id="resumen" class="col">
+        <h5>Total</h5>
+        <p id="total">0 $</p>
+        <table class="table table-hover">
+            <thead>
+                <th>Nombre</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+            </thead>
+            <tbody id="tabla_seleccionados">
+                
+            </tbody>
+        </table>
+      
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js%}
+<script src="{{url_for('static', filename = 'js/venta.js')}}"></script>
+{% endblock %}

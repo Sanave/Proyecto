@@ -49,4 +49,8 @@ def infoproducto(id):
 @nav.route('/venta', methods = ['GET', 'POST'])
 def venta():
     id = request.form['id_venta']
-    return render_template('venta.html', id = id)
+    cliente = Cliente.query.filter_by( id = id ).first()
+    productos = Producto.query.all()
+    if not cliente:
+        redirect(url_for('nav.cliente'))
+    return render_template('venta.html', cliente = cliente, productos = productos)
