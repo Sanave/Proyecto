@@ -14,9 +14,10 @@
     <div class="row">
     <!-- Tabla de selección de productos-->
      <div class="col">
-        <form action="">
+        <!-- Input de busqueda-->
+        <form id="formulario_busqueda">
            <label for="opcion_busqueda">Buscar por: </label>
-           <select name="opcion_busqueda" id="">
+           <select name="opcion_busqueda">
             <option value="nombre">Nombre</option>
             <option value="codigo">Código</option>
            </select>
@@ -31,7 +32,7 @@
                     <th>Precio</th>
                     <th>Cantidad</th>
                 </thead>
-                <tbody>
+                <tbody id="tabla_busqueda">
                     {% for producto in productos%}
                     <tr>
                         <td>{{ producto.nombre }}</td>

@@ -42,8 +42,6 @@ for ( let formulario of formularios){
                 total += producto.precio * cantidadProducto;
                 document.getElementById('total').innerText = total + ' $';
 
-                
-
             }
         }
         catch (error){
@@ -51,3 +49,73 @@ for ( let formulario of formularios){
         }
     });
 };
+
+// Tabla de busqueda
+document.getElementById('boton_buscar').addEventListener('click', async () => {
+    let formulario = document.getElementById('formulario_busqueda');
+
+    try{
+        const opcion_busqueda = formulario.opcion_busqueda.value;
+        const producto_busqueda = formulario.producto.value;
+
+        const respuesta = await fetch(`/get_producto_busqueda?producto=${producto_busqueda}&opcion_busqueda=${opcion_busqueda}`);
+        if (respuesta.ok){
+            const producto = await respuesta.json();
+            const tabla = document.getElementById('tabla_busqueda');
+            tabla.innerHTML = '';
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            //Crear los campos de la tabla
+            const tdNombre = document.createElement('td');
+            const tdCodigo = document.createElement('td');
+            const tdPrecio = document.createElement('td');
+            const tdFormulario = document.createElement('td');
+            //Asignar valores a la tabla
+            tdNombre.innerText = producto.nombre;
+            tdCodigo.innerText = producto.codigo;
+            tdPrecio.innerText = producto.precio;
+            //Crear formulario e inputs
+            const form = document.createElement('form');
+            const inputId = document.createElement('input');
+            const inputCantidad = document.createElement('input');
+            const boton = document.createElement('button');
+            boton.innerText = 'Agregar';
+            form.className = 'formulario_agregar'
+            //Asignar atributos
+            inputId.type = 'text';
+            inputId.className = 'id_producto';
+            inputId.value = producto.id;
+            inputId.name = 'id_producto';
+            inputId.readOnly = 'true';
+            inputId.style.display = 'none';
+
+            inputCantidad.type = 'number';
+            inputCantidad.min = '0';
+            inputCantidad.max = '100';
+            inputCantidad.name = 'cantidad';
+            inputCantidad.className = 'cantidad';
+
+            boton.type = 'button';
+            boton.className = 'btn btn-success boton_agregar';
+            boton.name = 'boton_agregar';
+            //Agregar todo a la tabla
+            form.append(inputId, inputCantidad, boton);
+            tdFormulario.appendChild(form);
+            tr.append(tdNombre, tdCodigo, tdPrecio, tdFormulario);
+            tabla.appendChild(tr);
+
+            //codigo de prueba******************************PENDIENTE
+            boton.addEventListener('click', async (evento) =>{
+                
+            });
+
+            
+
+        }
+        else{
+            console.log('xxxxxxxx');
+        }
+    }catch (error){
+        console.log(error);
+    };
+});

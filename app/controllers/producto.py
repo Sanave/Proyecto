@@ -38,6 +38,29 @@ def get_producto():
     else:
         print('El producto no existe')
 
+# Obtener información para barra de búsqueda
+@producto.route('/get_producto_busqueda', methods=['GET'])
+def get_producto_busqueda():
+    dato_busqueda = request.args.get('producto')
+    opcion_busqueda = request.args.get('opcion_busqueda')
+    try:
+        if opcion_busqueda == 'nombre':
+            producto = Producto.query.filter_by(nombre = dato_busqueda).first()
+            if producto:
+                return jsonify(producto.to_dict())
+            else:
+                return jsonify({'mensaje': 'Producto no encontrado'}), 404
+        if opcion_busqueda == 'codigo':
+            producto = Producto.query.filter_by(codigo = dato_busqueda).first()
+            if producto:
+                return jsonify(producto.to_dict())
+            else:
+                return jsonify({'mensaje': 'Producto no encontrado'}), 404
+        else:
+            print('no se puede enviar la información')
+            return jsonify({'mensaje':'error'})
+    except Exception as e:
+        print(e)
 
 # Eliminar producto
 @producto.route('/eliminar_producto', methods=['POST'])
