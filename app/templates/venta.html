@@ -40,9 +40,9 @@
                         <td>{{ producto.precio }}</td>
                         <td>
                             <form class="formulario_agregar">
-                                <input type="text" class="id_producto" value="{{ producto.id }}" name="id_producto" readonly style="display: none;">
-                                <input type="number" min="0" max="100" name="cantidad" class="cantidad">
-                                <button type="button" class="btn btn-success boton_agregar" name="boton_agregar">Agregar</button>
+                                <input type="text" class="id_producto" value="{{ producto.id }}" readonly style="display: none;">
+                                <input type="number" min="0" max="100" class="cantidad">
+                                <button type="button" class="btn btn-success boton_agregar">Agregar</button>
                             </form>
                         </td>
                     </tr>
