@@ -21,3 +21,21 @@
 .dropdown{
     background-color: lightgray;
 }
+
+.pantallaNegra{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    display: none;
+    justify-content: center;
+}
+
+#pantallaConfirmacion{
+    background-color: white;
+    z-index: 99;
+    height: 100%;
+}

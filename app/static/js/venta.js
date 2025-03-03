@@ -112,9 +112,85 @@ document.getElementById('boton_buscar').addEventListener('click', async () => {
 
         }
         else{
-            console.log('xxxxxxxx');
+            console.log('Hubo un error.');
         }
     }catch (error){
         console.log(error);
+    };
+});
+
+// Pantalla de confirmación de pedido
+document.getElementById('boton_guardar').addEventListener('click', async ()=> {
+    const cliente = document.getElementById('cliente_id').getAttribute('cliente');
+    const pantalla = document.getElementById('pantallaNegra');
+    try{
+        const respuesta = await fetch(`/venta_confirmacion?cliente=${cliente}&carrito=${JSON.stringify(carrito)}`);
+        if (respuesta.ok){
+            // Datos del cliente
+            const datos = await respuesta.json();
+            console.log(datos.productos.length);
+            const datosCliente = document.getElementById('confirmacion_cliente_datos');
+            datosCliente.innerHTML = '';
+            const titulo = document.createElement('h3');
+            titulo.innerText = 'Datos de compra'
+            const pNombre = document.createElement('p');
+            const pTelefono = document.createElement('p');
+            const pDireccion = document.createElement('p');
+            pNombre.innerText = `Nombre del cliente: ${datos.cliente.nombre}`;
+            pDireccion.innerText = `Dirección de envío: ${datos.cliente.direccion}`;
+            pTelefono.innerText = `Teléfono: ${datos.cliente.telefono}`;
+
+            datosCliente.append(titulo, pNombre, pDireccion, pTelefono);
+            // Datos de productos
+            const tabla_confirmacion = document.getElementById('tabla_confirmacion');
+            for (key in datos.productos){
+                if (datos.productos.hasOwnProperty(key)){
+                    const producto = datos.productos[key];
+                    const tr = document.createElement('tr');
+                    const tdNombreProducto = document.createElement('td');
+                    const tdCodigoProducto = document.createElement('td');
+                    const tdPrecioProducto = document.createElement('td');
+                    const tdCantidad = document.createElement('td');
+                    const tdPrecioTotalProducto = document.createElement('td');
+                    tdNombreProducto.innerText = producto.nombre;
+                    tdCodigoProducto.innerText = producto.codigo;
+                    tdPrecioProducto.innerText = producto.precio + ' $';
+                    tdCantidad.innerText = producto.cantidad;
+                    tdPrecioTotalProducto.innerText = producto.cantidad_total;
+    
+                    tr.append(tdNombreProducto, tdCodigoProducto, tdPrecioProducto, tdCantidad, tdPrecioTotalProducto);
+                    tabla_confirmacion.append(tr);
+                    document.getElementById('confirmacion_total').innerText = `Total : ${datos.total} $`;
+                }
+               
+
+            }
+
+            pantalla.style.display = 'flex';
+        }
+        
+
+
+        /*const tabla = document.getElementById('tabla_confirmacion');
+        const tr = document.createElement('tr');
+        const tdNombre = documento.createElement('td');
+        const tdCodigo = documento.createElement('td');
+        const tdPrecio = documento.createElement('td');
+        const tdTotal = documento.createElement('td');*/
+
+
+        
+    }
+    catch(error){console.log(error)};
+
+    
+    
+});
+
+document.getElementById('boton_cancelar_confirmacion').addEventListener('click', ()=> {
+    const pantalla = document.getElementById('pantallaNegra');
+    document.getElementById('tabla_confirmacion').innerHTML = '';
+    if (pantalla.style.display = 'flex'){
+        pantalla.style.display = 'none';
     };
 });

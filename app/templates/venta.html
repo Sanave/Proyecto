@@ -5,7 +5,7 @@
 <h2>Registro de venta</h2>
 <div>
     <h4>Datos del Cliente</h4>
-    <p>Nombre: {{ cliente.nombre }}</p>
+    <p id="cliente_id" cliente="{{ cliente.id }}">Nombre: {{ cliente.nombre }}</p>
     <p>Teléfono: {{ cliente.telefono }}</p>
     <p>Dirección de Envío: {{ cliente.direccion }}</p>
 </div>
@@ -65,10 +65,36 @@
                 
             </tbody>
         </table>
-      
+        <button type="button" class="btn btn-primary mt-5" id="boton_guardar">Guardar</button>
     </div>
     </div>
 </div>
+<!-- Pantalla de confirmación -->
+ <div class="pantallaNegra row" id="pantallaNegra">
+    <div class="col"></div>
+    <div class="col" id="pantallaConfirmacion">
+        <div id="confirmacion_cliente_datos">
+        </div>
+        <div>
+            <table class="table table-hover">
+                <thead>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Precio unitario</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                </thead>
+                <tbody id="tabla_confirmacion">
+
+                </tbody>
+            </table>
+        </div>
+        <h3 id="confirmacion_total"></h3>
+        <button type="button" class="btn btn-danger" id="boton_cancelar_confirmacion">Cancelar</button>
+    </div>
+    <div class="col"></div>
+
+ </div>
 {% endblock %}
 
 {% block js%}
