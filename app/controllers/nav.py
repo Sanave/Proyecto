@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from app.models.models import Cliente, Producto, Factura, Compra
+from flask_login import login_required
 nav = Blueprint('nav', __name__)
 
 @nav.route('/')
@@ -15,24 +16,28 @@ def login():
     return render_template('login.html')
 
 @nav.route('/clientes')
+@login_required
 def clientes():
     clientes = Cliente.query.all()
     return render_template('clientes.html', clientes = clientes)
 
 @nav.route('/productos')
+@login_required
 def productos():
     productos = Producto.query.all()
     return render_template('productos.html', productos = productos)
 
 @nav.route('/facturas')
+@login_required
 def facturas():
     facturas = Factura.query.all()
     return render_template('facturas.html', facturas = facturas)
 
 @nav.route('/compras')
+@login_required
 def compras():
     clientes = Cliente.query.all()
-    productos = Producto.query.filter_by(disponible=True).all()
+    productos = Producto.query.all()
     compras = Compra.query.all()
     return render_template('compras.html', clientes = clientes, productos = productos, compras = compras)
 
@@ -47,10 +52,11 @@ def infoproducto(id):
     return render_template('infoproducto.html', producto = producto)
 
 @nav.route('/venta', methods = ['GET', 'POST'])
+@login_required
 def venta():
     id = request.form['id_venta']
     cliente = Cliente.query.filter_by( id = id ).first()
     productos = Producto.query.all()
     if not cliente:
-        redirect(url_for('nav.cliente'))
+        redirect(url_for('nav.clientes'))
     return render_template('venta.html', cliente = cliente, productos = productos)

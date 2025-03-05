@@ -9,12 +9,6 @@ from flask import jsonify
 db = SQLAlchemy()
 
 
-
-compra_producto = db.Table('compra_producto', 
-    db.Column('compra_id', db.Integer, db.ForeignKey('compra.id'), primary_key=True),
-    db.Column('producto_id', db.Integer, db.ForeignKey('producto.id'), primary_key=True)
-)
-
 class Usuario(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(150), nullable = False)
@@ -36,8 +30,9 @@ class Cliente(db.Model):
     correo = db.Column(db.String(150), nullable = False, unique = True)
     tipo_cliente = db.Column(db.String(20), nullable = False)
     estado = db.Column(db.String(25), nullable = False)
-    #compras = db.relationship('Compra', backref = 'cliente', lazy = True, cascade="all, delete-orphan")
-    #facturas = db.relationship('Factura', backref = 'cliente', lazy = True, cascade="all, delete-orphan")
+    # Cliente - Compra
+    compras = db.relationship('Compra', backref = 'cliente')
+    
 
     def to_dict(self):
         return {
@@ -57,7 +52,8 @@ class Producto(db.Model):
     nombre = db.Column(db.String(150), nullable = False)
     precio = db.Column(db.Integer, nullable = False)
     codigo = db.Column(db.String(150), nullable = False, unique = True)
-    #compras = db.relationship('Compra', secondary=compra_producto, backref=db.backref('productos_compra', lazy='dynamic'))
+    # Producto - Compra
+    compras = db.relationship('CompraProducto', backref='producto')
 
     def to_dict(self):
         return {
@@ -65,7 +61,6 @@ class Producto(db.Model):
             "nombre" : self.nombre,
             "precio" : self.precio,
             "codigo" : self.codigo,
-            #"compras" : [compra.id for compra in self.compras]
         }
 
 class Factura(db.Model):
@@ -90,9 +85,10 @@ class Compra(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     fecha_venta = db.Column(db.Date, nullable=False, default=func.current_date())
     total = db.Column(db.Integer, nullable = False)
+    # Cliente - Compra
     id_cliente = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable = False)
-    factura = db.relationship('Factura', backref='compra', uselist=False, cascade="all, delete-orphan")
-    productos = db.relationship('Producto', secondary=compra_producto, backref=db.backref('compras_producto', lazy='dynamic'))
+    # Compra - Producto
+    productos = db.relationship('CompraProducto', backref='compra')
 
     def to_dict(self):
         return {
@@ -100,9 +96,28 @@ class Compra(db.Model):
             "fecha_venta" : self.fecha_venta,
             "total" : self.total,
             "id_cliente" : self.id_cliente,
-            "factura" : self.factura.id if self.factura else None,
-            "productos" : [producto.id for producto in self.productos]
+            "cliente": self.cliente.to_dict() if self.cliente else None,
+            #"factura" : self.factura.id if self.factura else None,
+            "productos": [
+                {
+                "id": cp.producto.id,
+                "nombre": cp.producto.nombre,
+                "precio": cp.producto.precio,
+                "codigo": cp.producto.codigo,  
+                "cantidad": cp.cantidad,  
+                "subtotal": cp.cantidad * cp.producto.precio  
+                }
+                for cp in self.productos 
+            ]
         }
+
+
+# Tabla intermedia Compra - Producto
+class CompraProducto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    compra_id = db.Column(db.Integer, db.ForeignKey('compra.id'), nullable=False)
+    producto_id = db.Column(db.Integer, db.ForeignKey('producto.id'), nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False, default=1)
 
 
     

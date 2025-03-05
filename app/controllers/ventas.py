@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, jsonify, json
-from app.models.models import db, Compra, Cliente, Producto, Factura
+from flask import Blueprint, render_template, request, jsonify, flash, json
+from app.models.models import db, Compra, Cliente, Producto, Factura, CompraProducto
 import random
 import string
+from sqlalchemy.sql import func
 
 venta = Blueprint('venta', __name__)
 
+# Confirmacion de para pantalla de venta
 @venta.route('venta_confirmacion', methods = ['GET'])
 def venta_confirmacion():
     id_cliente = request.args.get('cliente')
@@ -33,6 +35,23 @@ def venta_confirmacion():
     except Exception as e:
         print(e)
 
+# Obtener información de compra
+@venta.route('get_compra', methods = ['GET'])
+def get_compra():
+    id_compra = request.args.get('id')
+    try:
+        compra = Compra.query.filter_by(id = id_compra).first()
+        if not compra:
+            return jsonify({"mensaje" : "No se ha encontrado la compra."}), 404
+        return jsonify(compra.to_dict())
+    except Exception as error:
+        print(error)
+
+
+
+
+
+
 @venta.route('get_producto', methods = ['GET'])
 def get_producto():
     id = request.args.get('id')
@@ -40,29 +59,45 @@ def get_producto():
     if producto:
         return jsonify(producto.to_dict())
 
-
+# Registrar venta (pendiente)---------------------------------------------------------------
 @venta.route('/registrar_venta', methods=['POST'])
-def registrar_venta():
-    data = request.get_json()
-
-    productos_ids = data.get('productos', [])
+def registrar_compra():
+    data = request.json
     cliente_id = data.get('id_cliente')
-    total_venta = data.get('total')
+    productos = data.get('productos')  # {producto_id: cantidad}
 
+    if not cliente_id or not productos:
+        return jsonify({"error": "Se requiere id_cliente y productos"}), 400
+
+    # Verificar que el cliente existe
     cliente = Cliente.query.get(cliente_id)
-    productos = Producto.query.filter(Producto.id.in_(productos_ids)).all()
+    if not cliente:
+        print('cliente no encontrado')
+        return jsonify({"error": "Cliente no encontrado"}), 404
 
-    compra = Compra(total=total_venta, id_cliente=cliente_id)
+    # Crear la compra
+    compra = Compra(id_cliente=cliente.id, fecha_venta=func.current_date(), total=0)
     db.session.add(compra)
+    db.session.flush()  # Asegura que compra.id esté disponible antes de commit
+
+    total_compra = 0  # Calcular el total de la compra
+
+    for producto_id, cantidad in productos.items():
+        producto = Producto.query.get(producto_id)
+        if not producto:
+            print('producto no encontrado')
+            return jsonify({"error": f"Producto con ID {producto_id} no encontrado"}), 404
+
+        # Crear relación en CompraProducto
+        compra_producto = CompraProducto(compra_id=compra.id, producto_id=producto.id, cantidad=cantidad)
+        db.session.add(compra_producto)
+
+        # Calcular el total de la compra
+        total_compra += producto.precio * cantidad
+
+    # Actualizar total de la compra
+    compra.total = total_compra
     db.session.commit()
 
-    compra.productos = productos
-    db.session.commit()
-
-
-    numero_factura = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-    factura = Factura(numero_factura=numero_factura, total=total_venta, id_cliente=cliente_id, id_compra=compra.id)
-    db.session.add(factura)
-    db.session.commit()
-
-    return jsonify({"mensaje": "Venta registrada con éxito", "factura": factura.to_dict()}), 201
+    return jsonify({"message": "Compra registrada con éxito", "compra_id": compra.id}), 201
+   

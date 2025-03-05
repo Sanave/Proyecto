@@ -169,17 +169,6 @@ document.getElementById('boton_guardar').addEventListener('click', async ()=> {
             pantalla.style.display = 'flex';
         }
         
-
-
-        /*const tabla = document.getElementById('tabla_confirmacion');
-        const tr = document.createElement('tr');
-        const tdNombre = documento.createElement('td');
-        const tdCodigo = documento.createElement('td');
-        const tdPrecio = documento.createElement('td');
-        const tdTotal = documento.createElement('td');*/
-
-
-        
     }
     catch(error){console.log(error)};
 
@@ -193,4 +182,31 @@ document.getElementById('boton_cancelar_confirmacion').addEventListener('click',
     if (pantalla.style.display = 'flex'){
         pantalla.style.display = 'none';
     };
+});
+
+// Finalizar confirmacion
+document.getElementById('boton_finalizar_confirmacion').addEventListener('click', async ()=>{
+    const clienteId = document.getElementById('cliente_id').getAttribute('cliente');
+    try{
+        const respuesta = await fetch('/registrar_venta', {
+            method : 'POST',
+            headers : {'Content-Type': 'application/json'},
+            body : JSON.stringify({
+                id_cliente : clienteId,
+                productos : carrito
+            })
+        })
+
+        if (respuesta.ok){
+            const mensaje = await respuesta.json()
+            console.log(mensaje)
+        }
+        else{
+            const mensaje = await respuesta.json()
+            console.log(mensaje)
+        }
+    }
+    catch(error){
+        console.log(error)
+    }
 });

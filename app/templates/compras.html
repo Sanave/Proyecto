@@ -2,4 +2,60 @@
 
 {% block titulo %}VENTAS{% endblock %}
 
-{% block contenido%}{% endblock %}
+{% block contenido%}
+<h2>Registro de Compras</h2>
+<div class="row">
+    <!-- Tabla de registro de compras -->
+    <table class="table table-hover col">
+        <thead>
+            <th>ID</th>
+            <th>CLIENTE</th>
+            <th>FECHA</th>
+            <th>TOTAL</th>
+        </thead>
+        <tbody id="tabla_compras">
+            {% for compra in compras %}
+            <tr>
+                <td>{{ compra.id }}</td>
+                <td>{{ compra.cliente.nombre }}</td>
+                <td>{{ compra.fecha_venta }}</td>
+                <td>{{ compra.total }}</td>
+                <td><button type="button" class="btn btn-success botonInfo" valor="{{ compra.id }}">***</button></td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <!-- Sección de detalles de compra-->
+    <div class="col" id="seccion_detalles" style="display: none;">
+        <h2>Detalles</h2>
+        <div id="infoCompraCliente">
+            <p id="fechaVenta"></p>
+            <p id="nombreCliente"></p>
+            <p id="correoCliente"></p>
+            <p id="telefonoCliente"></p>
+            <p id="direccionCliente"></p>
+        </div>
+        <div id="infoCompraProductos">
+            <table class="table">
+                <thead>
+                    <th>NOMBRE</th>
+                    <th>PRECIO UNITARIO</th>
+                    <th>CANTIDAD</th>
+                    <th>TOTAL</th>
+                </thead>
+                <tbody id="tablaProductos">
+
+                </tbody>
+            </table>
+        </div>
+        <h3 id="compra_total"></h3>
+        <button type="button" class="btn btn-primary" id="cerrar_ventana_detalles">Cerrar</button>
+        
+    </div>
+</div>
+
+{% endblock%}
+
+{% block js%}
+<script src="{{url_for('static', filename = 'js/compras.js')}}"></script>
+{% endblock %}
