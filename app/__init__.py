@@ -27,12 +27,14 @@ def create_app():
     from .controllers.ventas import venta
     from .controllers.facturas import factura
     from .controllers.aut import aut
+    from .controllers.vendedores import vendedor
     app.register_blueprint(aut, url_prefix = '/')
     app.register_blueprint(factura, url_prefix = '/')
     app.register_blueprint(venta, url_prefix = '/')
     app.register_blueprint(producto, url_prefix = '/')
     app.register_blueprint(nav, url_prefix = '/')
     app.register_blueprint(cliente, url_prefix = '/')
+    app.register_blueprint(vendedor, url_prefix = '/')
     with app.app_context():
         db.create_all()
 

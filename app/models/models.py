@@ -31,7 +31,9 @@ class Cliente(db.Model):
     tipo_cliente = db.Column(db.String(20), nullable = False)
     estado = db.Column(db.String(25), nullable = False)
     # Cliente - Compra
-    compras = db.relationship('Compra', backref = 'cliente')
+    compras = db.relationship('Compra', backref = 'cliente', cascade="all, delete")
+    # Cliente - Factura
+    facturas = db.relationship('Factura', backref ='cliente', cascade="all, delete")
     
 
     def to_dict(self):
@@ -54,6 +56,8 @@ class Producto(db.Model):
     codigo = db.Column(db.String(150), nullable = False, unique = True)
     # Producto - Compra
     compras = db.relationship('CompraProducto', backref='producto')
+    # Factura - Productos
+    facturas = db.relationship('FacturaProducto', backref='producto')
 
     def to_dict(self):
         return {
@@ -68,8 +72,12 @@ class Factura(db.Model):
     numero_factura = db.Column(db.String(150), nullable = False, unique = True)
     fecha_emision = db.Column(db.Date, default=func.current_date())
     total = db.Column(db.Integer, nullable = False)
+    # Cliente -Factura
     id_cliente = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable = False)
+    # Compra - Factura
     id_compra = db.Column(db.Integer, db.ForeignKey('compra.id'), nullable=True)
+    # Factura - Productos
+    productos = db.relationship('FacturaProducto', backref='factura', cascade="all, delete")
 
     def to_dict(self):
         return {
@@ -88,7 +96,9 @@ class Compra(db.Model):
     # Cliente - Compra
     id_cliente = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable = False)
     # Compra - Producto
-    productos = db.relationship('CompraProducto', backref='compra')
+    productos = db.relationship('CompraProducto', backref='compra', cascade="all, delete")
+    # Compra - factura
+    factura = db.relationship('Factura', backref='compra', uselist=False, cascade="all, delete")
 
     def to_dict(self):
         return {
@@ -111,11 +121,34 @@ class Compra(db.Model):
             ]
         }
 
+class Vendedor(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    nombre = db.Column(db.String(150), nullable = False)
+    direccion = db.Column(db.String(150), nullable = False)
+    telefono = db.Column(db.String(15), nullable = False)
+    correo = db.Column(db.String(150), nullable = False, unique = True)
+
+    def to_dict(self):
+        return{
+            "id" : self.id,
+            "nombre" : self.nombre,
+            "direccion" : self.direccion,
+            "telefono" : self.telefono,
+            "correo" : self.correo
+        }
+
 
 # Tabla intermedia Compra - Producto
 class CompraProducto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    compra_id = db.Column(db.Integer, db.ForeignKey('compra.id'), nullable=False)
+    compra_id = db.Column(db.Integer, db.ForeignKey('compra.id', ondelete="CASCADE"), nullable=False)
+    producto_id = db.Column(db.Integer, db.ForeignKey('producto.id'), nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False, default=1)
+
+# Tabla intermedia Factura - Producto
+class FacturaProducto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    factura_id = db.Column(db.Integer, db.ForeignKey('factura.id'), nullable=False)
     producto_id = db.Column(db.Integer, db.ForeignKey('producto.id'), nullable=False)
     cantidad = db.Column(db.Integer, nullable=False, default=1)
 

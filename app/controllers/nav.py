@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from app.models.models import Cliente, Producto, Factura, Compra
+from app.models.models import Cliente, Producto, Factura, Compra, Vendedor
 from flask_login import login_required
 nav = Blueprint('nav', __name__)
 
@@ -60,3 +60,10 @@ def venta():
     if not cliente:
         redirect(url_for('nav.clientes'))
     return render_template('venta.html', cliente = cliente, productos = productos)
+
+@nav.route('/vendedores')
+@login_required
+def vendedores():
+    vendedores = Vendedor.query.all()
+    return render_template('vendedores.html', vendedores = vendedores)
+

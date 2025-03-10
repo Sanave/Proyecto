@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block titulo %}VENDEDORES{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <h1>Vendedores</h1>
+</div>
+<button class=" btn btn-primary col-sm-3 mb-3" id="registrar">Registrar Vendedor</button>
+<div class="row dropdown">
+    <div style="display: none;" id="formulario_registro">
+        <h2 class="mt-3">Registrar Vendedor.</h2>
+<!-- Formulario de registro de vendedores-->
+    <form class="mx-4" id="formulario_registro_vendedor" action="{{url_for('vendedor.registrar_vendedor')}}" method="post">
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="nombre">Nombre</label>
+            <input class="form-control" type="text" name="nombre">
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="correo">Correo</label>
+            <input class="form-control" type="email" name="correo">
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="telefono">Teléfono</label>
+            <input class="form-control" type="text" name="telefono">
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="direccion">Direccón</label>
+            <input class="form-control" type="text" name="direccion">
+        </div>
+        <div class="mt-5 mb-3">
+            <button class="btn btn-danger mx-2" id="cancelar" type="button">Cancelar</button>
+            <button class="btn btn-primary" id="guardar" type="submit">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Tablas -->
+<div class="row mt-5">
+<div class="col">
+    <table class="table table-hover">
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>CORREO</th>
+            <th>TELEFONO</th>
+            <th>DIRECCÓN</th>
+        </tr>
+        <tbody id="tbody">
+            {% for vendedor in vendedores %}
+            <tr>
+                <td>{{vendedor.id}}</td>
+                <td>{{vendedor.nombre}}</td>
+                <td>{{vendedor.correo}}</td>
+                <td>{{vendedor.telefono}}</td>
+                <td>{{vendedor.direccion}}</td>
+                <td>{{vendedor.estado}}</td>
+                <form action="{{url_for('vendedor.eliminar_vendedor')}}" method="post">
+                    <td><button class="btn btn-danger" name="id" value="{{vendedor.id}}" type="submit">X</button></td>
+                    <td><button class="btn btn-success boton_info" name="info" value="{{vendedor.id}}" type="button">***</button></td>
+                </form>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+</div>
+<!-- Barra lateral -->
+<div class="col" style="display: none;" id="formulario_actualizar">
+    <h2>Detalles</h2>
+    <form action="{{url_for('vendedor.actualizar_vendedor')}}" method="post">
+        <div class="mb-3 mt-3">
+            <input type="text" name="id_readonly" id="id_readonly" readonly style="display: none;">
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="info_nombre">Nombre</label>
+            <input class="form-control" type="text" id="info_nombre" name="info_nombre" readonly>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="info_correo">Correo</label>
+            <input class="form-control" type="email" id="info_correo" name="info_correo" readonly>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="info_telefono">Teléfono</label>
+            <input class="form-control" type="text" id="info_telefono" name="info_telefono" readonly>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="info_direccion">Direccón</label>
+            <input class="form-control" type="text" id="info_direccion" name="info_direccion" readonly>
+        </div>
+        <button type="button" class="btn btn-success" id="readonly_block">Actualizar Datos</button>
+        <div class="mt-5 mb-3">
+            <button class="btn btn-danger mx-2" id="cancelar_info" type="button">Cancelar</button>
+            <button class="btn btn-primary" id="guardar_info" type="submit" name="guardar_info">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}
+
+
+
+{% block js %}
+<script src="{{url_for('static', filename = 'js/vendedores.js')}}"></script>
+{% endblock %}

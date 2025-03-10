@@ -6,7 +6,7 @@ from sqlalchemy.sql import func
 
 venta = Blueprint('venta', __name__)
 
-# Confirmacion de para pantalla de venta
+#  Crear venta (Confirmacion de para pantalla de venta)
 @venta.route('venta_confirmacion', methods = ['GET'])
 def venta_confirmacion():
     id_cliente = request.args.get('cliente')
@@ -35,7 +35,7 @@ def venta_confirmacion():
     except Exception as e:
         print(e)
 
-# Obtener información de compra
+# Get compra
 @venta.route('get_compra', methods = ['GET'])
 def get_compra():
     id_compra = request.args.get('id')

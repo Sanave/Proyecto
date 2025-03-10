@@ -49,7 +49,11 @@
             </table>
         </div>
         <h3 id="compra_total"></h3>
-        <button type="button" class="btn btn-primary" id="cerrar_ventana_detalles">Cerrar</button>
+        <form action="{{url_for('factura.crear_factura')}}" method="post">
+            <input type="text" value="" name="id_compra" readonly id="id_compra" style="display: none;">
+            <button type="submit" class="btn btn-success">Generar factura</button>
+            <button type="button" class="btn btn-primary" id="cerrar_ventana_detalles">Cerrar</button>
+        </form>
         
     </div>
 </div>
