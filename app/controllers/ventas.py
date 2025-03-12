@@ -52,19 +52,19 @@ def get_compra():
 
 
 
-@venta.route('get_producto', methods = ['GET'])
+'''@venta.route('get_producto', methods = ['GET'])
 def get_producto():
     id = request.args.get('id')
     producto = Producto.query.filter_by(id = id).first()
     if producto:
-        return jsonify(producto.to_dict())
+        return jsonify(producto.to_dict())'''
 
 # Registrar venta (pendiente)---------------------------------------------------------------
 @venta.route('/registrar_venta', methods=['POST'])
 def registrar_compra():
     data = request.json
     cliente_id = data.get('id_cliente')
-    productos = data.get('productos')  # {producto_id: cantidad}
+    productos = data.get('productos')
 
     if not cliente_id or not productos:
         return jsonify({"error": "Se requiere id_cliente y productos"}), 400
@@ -72,15 +72,14 @@ def registrar_compra():
     # Verificar que el cliente existe
     cliente = Cliente.query.get(cliente_id)
     if not cliente:
-        print('cliente no encontrado')
         return jsonify({"error": "Cliente no encontrado"}), 404
 
     # Crear la compra
     compra = Compra(id_cliente=cliente.id, fecha_venta=func.current_date(), total=0)
     db.session.add(compra)
-    db.session.flush()  # Asegura que compra.id esté disponible antes de commit
+    db.session.flush()
 
-    total_compra = 0  # Calcular el total de la compra
+    total_compra = 0
 
     for producto_id, cantidad in productos.items():
         producto = Producto.query.get(producto_id)
@@ -99,5 +98,5 @@ def registrar_compra():
     compra.total = total_compra
     db.session.commit()
 
-    return jsonify({"message": "Compra registrada con éxito", "compra_id": compra.id}), 201
+    return jsonify({"message": "Compra registrada.", "compra_id": compra.id}), 201
    

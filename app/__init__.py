@@ -10,6 +10,7 @@ def create_app():
     app.config.from_object(Config)
     db.init_app(app)
 
+# Login manager
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'aut.registro'
@@ -20,7 +21,7 @@ def create_app():
 
 
 
-
+# Registro de Blueprints
     from .controllers.nav import nav
     from .controllers.cliente import cliente
     from .controllers.producto import producto
@@ -28,6 +29,7 @@ def create_app():
     from .controllers.facturas import factura
     from .controllers.aut import aut
     from .controllers.vendedores import vendedor
+
     app.register_blueprint(aut, url_prefix = '/')
     app.register_blueprint(factura, url_prefix = '/')
     app.register_blueprint(venta, url_prefix = '/')
@@ -35,6 +37,7 @@ def create_app():
     app.register_blueprint(nav, url_prefix = '/')
     app.register_blueprint(cliente, url_prefix = '/')
     app.register_blueprint(vendedor, url_prefix = '/')
+    # Crear base de datos
     with app.app_context():
         db.create_all()
 

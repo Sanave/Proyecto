@@ -16,13 +16,13 @@ def registro():
             nombre = request.form['nombre']
             correo = request.form['correo']
             contrasena = request.form['contrasena']
-            # Verificar espacios en blanco
+            # Validación de datos (pendiente)
             if nombre == '' or correo == '' or contrasena == '':
                 flash('Datos inválidos.', 'error')
                 return redirect(url_for('aut.registro'))
             # Verificar si el usuario ya existe
-            usuario_check = Usuario.query.filter_by(correo = correo).first()
-            if usuario_check:
+            usuario = Usuario.query.filter_by(correo = correo).first()
+            if usuario:
                 flash('El usuario ya existe.', 'error')
                 return redirect(url_for('aut.registro'))
             # Registrar usuario
@@ -30,6 +30,7 @@ def registro():
             nuevo_usuario = Usuario(nombre = nombre, correo = correo, contrasena = contrasena_hash)
             db.session.add(nuevo_usuario)
             db.session.commit()
+            # Iniciar la sesión del usuario
             login_user(nuevo_usuario)
             flash('El usuario se ha registrado.', 'success')
             return redirect(url_for('nav.clientes'))
@@ -47,16 +48,16 @@ def login():
             # Recibir datos del formulario
             correo = request.form['correo']
             contrasena = request.form['contrasena']
-            # Verificar espacios en blanco
+            # Validación de datos (pendiente)
             if correo == '' or contrasena == '':
                 flash('Correo o contraseña invalidos.', 'error')
                 return redirect(url_for('aut.login'))
             # Verificar si el usuario existe
-            correo_check = Usuario.query.filter_by(correo = correo).first()
-            if correo_check and check_password_hash(correo_check.contrasena, contrasena):
+            usuario = Usuario.query.filter_by(correo = correo).first()
+            if usuario and check_password_hash(usuario.contrasena, contrasena):
                 # Logear usuario
-                flash('Bienvenido ' + correo_check.nombre, 'success')
-                login_user(correo_check)
+                flash('Bienvenido ' + usuario.nombre, 'success')
+                login_user(usuario)
                 return redirect(url_for('nav.clientes'))
             else:
                 flash('Correo o contraseña incorrecta', 'error')

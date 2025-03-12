@@ -41,25 +41,19 @@ def compras():
     compras = Compra.query.all()
     return render_template('compras.html', clientes = clientes, productos = productos, compras = compras)
 
-@nav.route('/infocliente/<id>', methods = ['GET'])
-def infocliente(id):
-    cliente = Cliente.query.filter_by( id = id).first()
-    return render_template('infocliente.html', cliente = cliente)
-
-@nav.route('/infoproducto/<id>', methods = ['GET'])
-def infoproducto(id):
-    producto = Producto.query.filter_by(id=id).first()
-    return render_template('infoproducto.html', producto = producto)
-
 @nav.route('/venta', methods = ['GET', 'POST'])
 @login_required
 def venta():
-    id = request.form['id_venta']
-    cliente = Cliente.query.filter_by( id = id ).first()
-    productos = Producto.query.all()
-    if not cliente:
-        redirect(url_for('nav.clientes'))
-    return render_template('venta.html', cliente = cliente, productos = productos)
+    try:
+        id = request.form['id_venta']
+        cliente = Cliente.query.filter_by( id = id ).first()
+        productos = Producto.query.all()
+        if not cliente:
+            redirect(url_for('nav.clientes'))
+        return render_template('venta.html', cliente = cliente, productos = productos)
+    except Exception as e:
+        print(e)
+        return render_template('venta.html', cliente = cliente, productos = productos)
 
 @nav.route('/vendedores')
 @login_required

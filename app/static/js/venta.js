@@ -112,7 +112,9 @@ document.getElementById('boton_buscar').addEventListener('click', async () => {
 
         }
         else{
-            console.log('Hubo un error.');
+            const producto = await respuesta.json();
+            document.getElementById('tabla_busqueda').innerHTML = producto.mensaje;
+            console.log(producto.mensaje);
         }
     }catch (error){
         console.log(error);
@@ -200,6 +202,9 @@ document.getElementById('boton_finalizar_confirmacion').addEventListener('click'
         if (respuesta.ok){
             const mensaje = await respuesta.json()
             console.log(mensaje)
+            alert(mensaje.message)
+            window.location.href = '/clientes';
+
         }
         else{
             const mensaje = await respuesta.json()

@@ -38,6 +38,10 @@ botonesInfo.forEach(boton => {
                 //direccion.value = cliente.direccion;
                 //tcliente.value = cliente.tipo_cliente;
             }
+            else{
+                const producto = await respuesta.json();
+                console.log(producto.mensaje);
+            }
         } catch (error) {
             console.log(error);
         }

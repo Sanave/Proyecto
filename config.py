@@ -1,3 +1,4 @@
+# Configuración de la aplicación
 class Config:
     SECRET_KEY = '24061998'
     SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from app.models.models import *
 import uuid
 
@@ -13,7 +13,7 @@ def crear_factura():
         # Obtener la compra y cliente
         compra = Compra.query.get(id_compra)
         id_cliente = compra.id_cliente
-        cliente = Cliente.query.get(id_cliente)  # No es obligatorio para registrar la factura
+        cliente = Cliente.query.get(id_cliente)
 
         # Obtener los productos de la compra
         productos_compra = CompraProducto.query.filter_by(compra_id=id_compra).all()
@@ -21,27 +21,28 @@ def crear_factura():
         # Calcular total de la factura
         total_factura = sum(cp.producto.precio * cp.cantidad for cp in productos_compra)
         
-        # Generar número de factura único
+        # Generar número de factura
         numero_factura = str(uuid.uuid4())[:8]
 
         # Crear la factura
         factura = Factura(numero_factura=numero_factura, id_cliente=id_cliente, id_compra=id_compra, total=total_factura)
         db.session.add(factura)
-        db.session.flush()  # Permite obtener el id de la factura antes de commit
+        db.session.flush()
 
         # Agregar productos a la factura
         for cp in productos_compra:
             factura_producto = FacturaProducto(factura_id=factura.id, producto_id=cp.producto_id, cantidad=cp.cantidad)
             db.session.add(factura_producto)
 
-        db.session.commit()  # Guardar cambios en la BD
-
-        return "Factura creada", 201
+        db.session.commit()
+        flash('Factura Guardada', 'success')
+        return redirect(url_for('nav.facturas'))
 
     except Exception as e:
         print(e)
-        db.session.rollback()  # Deshacer cambios si hay error
-        return "Error al crear la factura", 500
+        db.session.rollback()
+        flash('Hubo un error.', 'error')
+        return redirect(url_for('nav.facturas'))
 
 
 
@@ -51,13 +52,3 @@ def crear_factura():
 def get_facturas():
     facturas = Factura.query.all()
     return jsonify([factura.to_dict() for factura in facturas])
-
-
-@factura.route('/info_factura', methods=['GET'])
-def info_factura():
-    id = request.args.get('id')
-    factura = Factura.query.filter_by(id=id).first()
-    if factura:
-        return jsonify(factura.to_dict())
-    else:
-        return jsonify({"mensaje": "Factura no encontrada."}), 404
