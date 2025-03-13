@@ -86,7 +86,9 @@ class Factura(db.Model):
             "fecha_emision" : self.fecha_emision,
             "total" : self.total,
             "id_cliente" : self.id_cliente,
-            "id_compra" : self.id_compra
+            "id_compra" : self.id_compra,
+            "cliente": self.cliente.to_dict() if self.cliente else None,
+            "productos": [producto.to_dict() for producto in self.productos]
         }
 
 class Compra(db.Model):
@@ -151,6 +153,15 @@ class FacturaProducto(db.Model):
     factura_id = db.Column(db.Integer, db.ForeignKey('factura.id'), nullable=False)
     producto_id = db.Column(db.Integer, db.ForeignKey('producto.id'), nullable=False)
     cantidad = db.Column(db.Integer, nullable=False, default=1)
+
+    def to_dict(self):
+        return{
+            "id": self.id,
+            "factura_id": self.factura_id,
+            "producto_id": self.producto_id,
+            "cantidad": self.cantidad,
+            "producto": self.producto.to_dict() if self.producto else None
+        }
 
 
     

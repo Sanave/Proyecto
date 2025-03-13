@@ -5,11 +5,22 @@ vendedor = Blueprint('vendedor', __name__)
 # Registrar vendedor
 @vendedor.route('/registrar_vendedor', methods = ['POST'])
 def registrar_vendedor():
-    nombre = request.form['nombre']
-    correo = request.form['correo']
-    telefono = request.form['telefono']
-    direccion = request.form['direccion']
     try:
+        # Datos del formulario
+        nombre = request.form.get('nombre')
+        correo = request.form.get('correo')
+        telefono = request.form.get('telefono')
+        direccion = request.form.get('direccion')
+        # Validación
+        if not (nombre and correo and telefono and direccion):
+            flash('Datos inválidos.', 'error')
+            return redirect (url_for('nav.vendedores'))
+        # Verificar si existe el vendedor
+        correo_verificacion = Vendedor.query.filter_by(correo = correo).first()
+        if correo_verificacion:
+            flash('El correo ingresado ya se encuentra registrado', 'error')
+            return redirect(url_for('nav.vendedores'))
+        # Registrar vendedor
         vendedor = Vendedor(nombre = nombre, correo = correo, telefono = telefono, direccion = direccion)
         db.session.add(vendedor)
         db.session.commit()
@@ -21,27 +32,33 @@ def registrar_vendedor():
         flash('Hubo un error', 'error')
     return render_template('vendedores.html')
 
-# Get datos vendedor
+# Obtener información de un vendedor
 @vendedor.route('/get_vendedor')
 def get_vendedor():
     id = request.args.get('id')
     vendedor = Vendedor.query.filter_by(id = id).first()
     if vendedor:
-        return jsonify(vendedor.to_dict())
+        return jsonify(vendedor.to_dict()), 200
     else:
-        print('El vendedor no existe')
+        return jsonify({'mensaje' : 'Cliente no encontrado.'})
 
 # Actualizar datos vendedor
 @vendedor.route('/actualizar_vendedor', methods = ['POST'])
 def actualizar_vendedor():
-    id = request.form.get('id_readonly')
-    nombre = request.form.get('info_nombre')
-    correo = request.form.get('info_correo')
-    telefono = request.form.get('info_telefono')
-    direccion = request.form.get('info_direccion')
-    vendedor = Vendedor.query.filter_by(id = id).first()
-    if vendedor:
-        try:
+    try:
+        id = request.form.get('id_readonly')
+        nombre = request.form.get('info_nombre')
+        correo = request.form.get('info_correo')
+        telefono = request.form.get('info_telefono')
+        direccion = request.form.get('info_direccion')
+        # Validación
+        if not (id and nombre and correo and telefono and direccion):
+            flash('Datos inválidos.', 'error')
+            return redirect(url_for('nav.vendedores'))
+        # Buscar vendedor en la base de datos
+        vendedor = Vendedor.query.filter_by(id = id).first()
+        if vendedor:
+            # Actualizar datos
             vendedor.nombre = nombre
             vendedor.correo = correo
             vendedor.telefono = telefono
@@ -49,21 +66,31 @@ def actualizar_vendedor():
             db.session.commit()
             flash('Se han actualizado los datos del vendedor.', 'success')
             return redirect(url_for('nav.vendedores'))
-        except Exception as e:
-            print(e)
-            flash('Hubo un error.', 'error')
-            return redirect(url_for('nav.vendedores'))
+    except Exception as e:
+        print(e)
+        flash('Hubo un error.', 'error')
+        return redirect(url_for('nav.vendedores'))
 
 # Eliminar vendedor
 @vendedor.route('/eliminar_vendedor', methods = ['POST'])
 def eliminar_vendedor():
-    id_vendedor = request.form['id']
     try:
+        id_vendedor = request.form.get('id')
+        # Validación
+        if not id_vendedor:
+            flash('Hubo un error. El vendedor no se ha registrado.', 'error')
+            return redirect(url_for('nav.vendedores'))
+        # Buscar vendedor en BD
         vendedor = Vendedor.query.filter_by(id = id_vendedor).first()
-        db.session.delete(vendedor)
-        db.session.commit()
-        flash('El vendedor ha sido eliminado.', 'success')
-        return redirect(url_for('nav.vendedores'))
+        if vendedor:
+            # Eliminar cliente
+            db.session.delete(vendedor)
+            db.session.commit()
+            flash('El vendedor ha sido eliminado.', 'success')
+            return redirect(url_for('nav.vendedores'))
+        else:
+            flash('Vendedor no encontrado.', 'error')
+            return redirect(url_for('nav.vendedores'))
     except Exception as e:
         print(e)
         flash('Hubo un error.', 'error')

@@ -35,6 +35,10 @@ botonesInfo.forEach(boton => {
                 telefono.value = vendedor.telefono;
                 direccion.value = vendedor.direccion;
             }
+            else{
+                const vendedor = await respuesta.json();
+                console.log(vendedor.mensaje);
+            }
         } catch (error) {
             console.log(error);
         }

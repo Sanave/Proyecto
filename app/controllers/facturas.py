@@ -45,8 +45,19 @@ def crear_factura():
         return redirect(url_for('nav.facturas'))
 
 
-
-
+@factura.route('/get_factura', methods=['GET'])
+def get_factura():
+    try:
+        id_factura = request.args.get('id')
+        if not id_factura:
+            return jsonify({'mensaje' : 'Hubo un error al recibir el id del cliente'}, 500)
+        factura = Factura.query.filter_by(id = id_factura).first()
+        if not factura:
+            return jsonify({'mensaje' : 'No se ha encontrado la factura.'}), 404
+        return jsonify(factura.to_dict()), 200
+    except Exception as error:
+        print(error)
+        
 
 @factura.route('/get_facturas', methods=['GET'])
 def get_facturas():

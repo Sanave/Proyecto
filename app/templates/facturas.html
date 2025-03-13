@@ -4,6 +4,7 @@
 
 {% block contenido%}
 <h1>Facturas</h1>
+<!-- Tabla de facturas-->
 <div>
     <table class="table table-hover">
         <thead>
@@ -21,13 +22,38 @@
                 <td>{{ factura.fecha_emision }}</td>
                 <td>{{ factura.cliente.nombre }}</td>
                 <td>{{ factura.total }}</td>
-                <td><button class="btn btn-primary">***</button></td>
+                <td><button class="btn btn-primary boton_info" value="{{factura.id}}">***</button></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-{% for factura in facturas%}
-{% endfor %}
+<!-- Detalles de factura -->
+<div class="pantallaNegra row" id="pantallaNegra">
+    <div class="col"></div>
+    <div class="col" id="pantallaConfirmacion">
+        <div id="informacion_factura">
+        </div>
+        <div>
+            <table class="table table-hover">
+                <thead>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Precio unitario</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                </thead>
+                <tbody id="tabla_detalles_factura">
 
+                </tbody>
+            </table>
+        </div>
+        <h3 id="confirmacion_total"></h3>
+        <button type="button" class="btn btn-danger" id="boton_cancelar">Cerrar</button>
+    </div>
+    <div class="col"></div>
+ </div>
+{% endblock %}
+{% block js%}
+<script src="{{url_for('static', filename = 'js/facturas.js')}}"></script>
 {% endblock %}

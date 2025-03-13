@@ -16,12 +16,12 @@ def registrar_producto():
             if not (nombre and precio and codigo):
                 flash('Datos inválidos', 'error')
                 return redirect(url_for('nav.productos'))
-                # Registrar producto
-                producto = Producto(nombre = nombre, precio = precio, codigo = codigo)
-                db.session.add(producto)
-                db.session.commit()
-                flash('El producto se ha registrado', 'success')
-                return redirect (url_for('nav.productos'))
+            # Registrar producto
+            producto = Producto(nombre = nombre, precio = precio, codigo = codigo)
+            db.session.add(producto)
+            db.session.commit()
+            flash('El producto se ha registrado', 'success')
+            return redirect (url_for('nav.productos'))
         except Exception as e:
             db.session.rollback()
             print(e)
