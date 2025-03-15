@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import render_template, redirect, url_for, request, flash
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.models import db, Usuario
 
@@ -70,6 +70,7 @@ def login():
 
 # Cerrar sesión
 @aut.route('/logout')
+@login_required
 def logout():
     # Cerrar la sesión del usuario y mostrar notificación
     logout_user() 

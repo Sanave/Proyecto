@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, flash
 from app.models.models import db, Cliente, Compra, Factura
+from flask_login import login_required
 cliente = Blueprint('cliente', __name__)
 
 # Registrar clientes
 @cliente.route('/registrar_cliente', methods = ['POST'])
+@login_required
 def registrar_cliente():
     if request.method == 'POST':
         try:
@@ -18,8 +20,8 @@ def registrar_cliente():
                 flash('Datos no validos', 'error')
                 return redirect(url_for('nav.clientes'))
             # Verificar correo
-            correo = Cliente.query.filter_by(correo = correo)
-            if correo:
+            correo_check = Cliente.query.filter_by(correo = correo).first()
+            if correo_check:
                 flash('El correo ingresado ya se encuentra registrado', 'error')
                 return redirect(url_for('nav.clientes'))
             # Registrar cliente
@@ -37,6 +39,7 @@ def registrar_cliente():
 
 # Eliminar clientes
 @cliente.route('/eliminar_cliente', methods=['POST'])
+@login_required
 def eliminar_cliente():
     try:
         cliente_id = request.form.get('id')
@@ -65,6 +68,7 @@ def eliminar_cliente():
 
 # Obtener información de un cliente
 @cliente.route('/get_cliente')
+@login_required
 def get_cliente():
     id = request.args.get('id')
     cliente = Cliente.query.filter_by(id = id).first()
@@ -76,6 +80,7 @@ def get_cliente():
 
 # Actualizar información de un cliente
 @cliente.route('/actualizar_cliente', methods = ['POST'])
+@login_required
 def actualizar_cliente():
     try:
     # Datos del formulario

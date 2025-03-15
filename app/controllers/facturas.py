@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from app.models.models import *
+from flask_login import login_required
 import uuid
 
 factura = Blueprint('factura', __name__)
 
 # Crear factura
 @factura.route('/crear_factura', methods=['POST'])
+@login_required
 def crear_factura():
     try:
         id_compra = request.form.get('id_compra')
@@ -46,6 +48,7 @@ def crear_factura():
 
 
 @factura.route('/get_factura', methods=['GET'])
+@login_required
 def get_factura():
     try:
         id_factura = request.args.get('id')
@@ -60,6 +63,7 @@ def get_factura():
         
 
 @factura.route('/get_facturas', methods=['GET'])
+@login_required
 def get_facturas():
     facturas = Factura.query.all()
     return jsonify([factura.to_dict() for factura in facturas])

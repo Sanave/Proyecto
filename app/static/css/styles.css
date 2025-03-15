@@ -32,10 +32,11 @@
     z-index: 98;
     display: none;
     justify-content: center;
+    overflow-y: auto;
 }
 
 #pantallaConfirmacion{
     background-color: white;
     z-index: 99;
-    height: 100%;
+    height: auto;
 }

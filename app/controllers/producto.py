@@ -1,10 +1,12 @@
 
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
-from app.models.models import db, Producto  
+from app.models.models import db, Producto, CompraProducto  
+from flask_login import login_required
 producto = Blueprint('producto', __name__)
 
 # Registrar producto
 @producto.route('/registrar_producto', methods=['POST'])
+@login_required
 def registrar_producto():
     if request.method == 'POST':
         try:
@@ -33,6 +35,7 @@ def registrar_producto():
 
 # Obtener información de un producto
 @producto.route('/get_producto', methods=['GET'])
+@login_required
 def get_producto():
     id = request.args.get('id')
     producto = Producto.query.filter_by(id = id).first()
@@ -43,6 +46,7 @@ def get_producto():
 
 # Obtener información para barra de búsqueda
 @producto.route('/get_producto_busqueda', methods=['GET'])
+@login_required
 def get_producto_busqueda():
     dato_busqueda = request.args.get('producto')
     opcion_busqueda = request.args.get('opcion_busqueda')
@@ -68,6 +72,7 @@ def get_producto_busqueda():
 
 # Eliminar producto
 @producto.route('/eliminar_producto', methods=['POST'])
+@login_required
 def eliminar_producto():
     try:
         producto_id = request.form['id']
@@ -95,6 +100,7 @@ def eliminar_producto():
 
 # Actualizar infromación de un producto
 @producto.route('/actualizar_producto', methods=['POST'])
+@login_required
 def actualizar_producto():
     try:
         # Datos del producto

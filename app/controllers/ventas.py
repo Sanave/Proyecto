@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, flash, json
 from app.models.models import db, Compra, Cliente, Producto, Factura, CompraProducto
+from flask_login import login_required
 import random
 import string
 from sqlalchemy.sql import func
@@ -8,6 +9,7 @@ venta = Blueprint('venta', __name__)
 
 #  Crear venta (Confirmacion de para pantalla de venta)
 @venta.route('venta_confirmacion', methods = ['GET'])
+@login_required
 def venta_confirmacion():
     id_cliente = request.args.get('cliente')
     carrito = request.args.get('carrito')
@@ -37,6 +39,7 @@ def venta_confirmacion():
 
 # Get compra
 @venta.route('get_compra', methods = ['GET'])
+@login_required
 def get_compra():
     id_compra = request.args.get('id')
     try:
@@ -48,19 +51,9 @@ def get_compra():
         print(error)
 
 
-
-
-
-
-'''@venta.route('get_producto', methods = ['GET'])
-def get_producto():
-    id = request.args.get('id')
-    producto = Producto.query.filter_by(id = id).first()
-    if producto:
-        return jsonify(producto.to_dict())'''
-
 # Registrar venta (pendiente)---------------------------------------------------------------
 @venta.route('/registrar_venta', methods=['POST'])
+@login_required
 def registrar_compra():
     data = request.json
     cliente_id = data.get('id_cliente')

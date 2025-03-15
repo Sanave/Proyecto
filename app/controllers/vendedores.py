@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, json, flash, jsonify
 from app.models.models import db, Vendedor
+from flask_login import login_required
 vendedor = Blueprint('vendedor', __name__)
 
 # Registrar vendedor
 @vendedor.route('/registrar_vendedor', methods = ['POST'])
+@login_required
 def registrar_vendedor():
     try:
         # Datos del formulario
@@ -34,6 +36,7 @@ def registrar_vendedor():
 
 # Obtener información de un vendedor
 @vendedor.route('/get_vendedor')
+@login_required
 def get_vendedor():
     id = request.args.get('id')
     vendedor = Vendedor.query.filter_by(id = id).first()
@@ -44,6 +47,7 @@ def get_vendedor():
 
 # Actualizar datos vendedor
 @vendedor.route('/actualizar_vendedor', methods = ['POST'])
+@login_required
 def actualizar_vendedor():
     try:
         id = request.form.get('id_readonly')
@@ -73,6 +77,7 @@ def actualizar_vendedor():
 
 # Eliminar vendedor
 @vendedor.route('/eliminar_vendedor', methods = ['POST'])
+@login_required
 def eliminar_vendedor():
     try:
         id_vendedor = request.form.get('id')
