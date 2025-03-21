@@ -2,11 +2,13 @@ from flask import Flask
 from config import Config
 from .models.models import db, Usuario
 from flask_login import LoginManager
+from flask_cors import CORS
 
 
 
 def create_app():
     app = Flask (__name__)
+    cors = CORS(app)
     app.config.from_object(Config)
     db.init_app(app)
 
