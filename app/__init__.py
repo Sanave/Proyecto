@@ -3,15 +3,22 @@ from config import Config
 from .models.models import db, Usuario
 from flask_login import LoginManager
 from flask_cors import CORS
+from flask_restful import Api
+from app.api.productos_api import ProductosApi
+
+
 
 
 
 def create_app():
     app = Flask (__name__)
-    cors = CORS(app)
+
     app.config.from_object(Config)
     db.init_app(app)
 
+    api = Api(app)
+    api.add_resource(ProductosApi, '/api/productos')
+    CORS(app)
 # Login manager
     login_manager = LoginManager()
     login_manager.init_app(app)

@@ -1,15 +1,13 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
 from flask_cors import cross_origin
 from app.models.models import db, Producto
 
-class productosApi(Resource):
-    @cross_origin
+class ProductosApi(Resource):
+    # Este decorador lanza error en la API.
+   # @cross_origin (Supuestamente no es necesario. CORS(app) se aplica globalmente a toda la aplicación)
     def post (self):
-        nombre = request.json['nombre']
-        precio = request.json['precio']
-        codigo = request.json['codigo']
-        producto = Producto(nombre = nombre, precio = precio, codigo = codigo)
-        db.session.add(producto)
-        db.session.commit()
-        return 'Producto guardado.'
+       producto = Producto(nombre = request.json['nombre'], codigo = request.json['codigo'], precio = request.json['precio'])
+       db.session.add(producto)
+       db.session.commit()
+       return jsonify({"mensaje" : "producto guardado"})
