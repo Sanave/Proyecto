@@ -2,7 +2,17 @@
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from app.models.models import db, Producto, CompraProducto  
 from flask_login import login_required
+#from app import app
+
+#from flask_restful import Api
+#from app.api.productos_api import ProductosApi
+
+
 producto = Blueprint('producto', __name__)
+
+
+#api = Api(app)
+#api.add_resource(ProductosApi, '/api/productos')
 
 # Registrar producto
 @producto.route('/registrar_producto', methods=['POST'])
@@ -129,7 +139,8 @@ def actualizar_producto():
         print(e)
         flash('Hubo un error.', 'error')
         return redirect(url_for('nav.productos'))
-    
+
+
 
 
     
