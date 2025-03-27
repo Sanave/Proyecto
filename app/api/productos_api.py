@@ -11,3 +11,15 @@ class ProductosApi(Resource):
        db.session.add(producto)
        db.session.commit()
        return jsonify({"mensaje" : "producto guardado"})
+    
+    def get(self):
+        productos = Producto.query.all()
+        productos_dict = []
+        for producto in productos:
+            productos_dict.append({
+                'id' : producto.id,
+                'nombre' : producto.nombre,
+                'codigo' : producto.codigo,
+                'precio' : producto.precio
+            })
+        return jsonify(productos_dict)
